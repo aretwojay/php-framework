@@ -112,3 +112,12 @@ On pourra utiliser ce framework pour créer des API ou des applications monolith
 
 - toutes les classes liées au fonctionnement du framework doivent aller dans un dossier `app/src/Lib`
 - toutes les autres restent dans `app/src`
+
+ ## Étape 11
+
+**Objectif** : permettre de lancer une commande pour créer le schéma de base de données
+
+- créer un dossier `app/src/Lib/Entities` : on y stockera la classe abstraite pour définir des entités
+- créer un fichier `app/src/Lib/Entities/AbstractEntity.php` : il servira de modèle à toutes les futures entités
+- créer un dossier `app/src/Lib/Annotations/ORM` : on y stockera les attributs/annotations qui permettront de configurer les propriétés des entités
+- créer un fichier `app/src/Lib/Commands/CreateSchema.php`
