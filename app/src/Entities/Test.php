@@ -6,7 +6,7 @@ use App\Lib\Annotations\ORM\Column;
 use App\Lib\Annotations\ORM\Id;
 use App\Lib\Entities\AbstractEntity;
 
-class Test extends AbstractEntity {
+class Test {
 
     #[Id]
     #[Column(type: 'varchar', size: 255)]

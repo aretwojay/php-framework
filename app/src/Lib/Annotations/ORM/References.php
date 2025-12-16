@@ -7,12 +7,10 @@ use App\Lib\Annotations\AbstractAnnotation;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Column extends AbstractAnnotation{
+class References extends AbstractAnnotation{
     public function __construct(
-        public string $type,
-        public bool $nullable = false,
-        public int|null $size = null,
-        public string|null $name = null
+        public string $class,
+        public string $property
     ){}
 }
 
