@@ -6,11 +6,9 @@ use App\Lib\Controllers\AbstractController;
 use App\Lib\Http\Request;
 use App\Lib\Http\Response;
 
-class TestController extends AbstractController {
+class FoobarrController extends AbstractController {
     public function process(Request $request): Response {
-        return $this->render('test', [
-            'title' => 'Pouet',
-            'items' => ['foo', 'bar', $request->getSlug('id')],
-        ]);;
+        var_dump($request->getSlugs());die;
+        return new Response('hello world', 200, []);
     }
 }

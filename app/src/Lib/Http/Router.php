@@ -39,7 +39,24 @@ class Router {
     }
 
     private static function checkUri(Request $request, array $route): bool {
-        return $request->getUri() === $route['path'];
+        $requestUriParts = self::getUrlParts($request->getPath());
+        $routePathParts = self::getUrlParts($route['path']);
+
+        if(self::checkUrlPartsNumberMatches($requestUriParts, $routePathParts) === false) {
+            return false;
+        }
+
+        foreach($routePathParts as $key => $part) {
+            if(self::isUrlPartSlug($part) === false) {
+                if($part !== $requestUriParts[$key]) {
+                    return false;
+                }
+            }else{
+                $request->addSlug(substr($part, 1), $requestUriParts[$key]);
+            }
+        }
+
+        return true;
     }
     
     private static function getControllerInstance(string $controller): AbstractController {
@@ -56,6 +73,18 @@ class Router {
         }
         
         return $controllerInstance;
+    }
+
+    private static function getUrlParts(string $url): array {
+        return explode('/', trim($url, '/'));
+    }
+
+    private static function checkUrlPartsNumberMatches(array $requestUriParts, array $routePathParts): bool {
+        return count($requestUriParts) === count($routePathParts);
+    }
+
+    private static function isUrlPartSlug(string $part): bool {
+        return strpos($part, ':') === 0;
     }
 
 }
