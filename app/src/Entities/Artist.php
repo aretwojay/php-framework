@@ -27,6 +27,11 @@ class Artist extends AbstractEntity {
     
     #[Column(type: 'varchar', size: 255)]
     public string $country;
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
   
 }
 

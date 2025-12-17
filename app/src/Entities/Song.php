@@ -31,6 +31,11 @@ class Song extends AbstractEntity {
     #[Column(type: 'int')]
     #[References(class: Album::class, property: 'id')]
     public string $album;
+    
+    public function getId(): int
+    {
+        return $this->id;
+    }
   
 }
 
