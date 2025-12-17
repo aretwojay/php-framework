@@ -22,6 +22,9 @@ On pourra utiliser ce framework pour créer des API ou des applications monolith
   - [Étape 8](#étape-8)
   - [Étape 9](#étape-9)
   - [Étape 10](#étape-10)
+  - [Étape 11](#étape-11)
+  - [Étape 12](#étape-12)
+  - [Étape 13](#étape-13)
 <!--toc:end-->
 
 ## Étape 0
@@ -121,3 +124,23 @@ On pourra utiliser ce framework pour créer des API ou des applications monolith
 - créer un fichier `app/src/Lib/Entities/AbstractEntity.php` : il servira de modèle à toutes les futures entités
 - créer un dossier `app/src/Lib/Annotations/ORM` : on y stockera les attributs/annotations qui permettront de configurer les propriétés des entités
 - créer un fichier `app/src/Lib/Commands/CreateSchema.php`
+
+## Étape 12
+
+**Objectif** : permettre à la création de schéma de base de gérer les foreign key
+
+- ajouter une annotation `app/src/Lib/Annotations/ORM/References.php`
+- adapter `app/src/Lib/Commands/CreateSchema.php` pour organiser les tables à créer en fonction des dépendances et rajouter les contraintes de FOREIGN KEY
+
+## Étape 13
+
+**Objectif** : ajouter un système de fonctions PHP pour construire une requête SQL
+
+- créer une classe `app/src/Lib/Repositories/AbstractRepository.php` : elle servira de base à tous les autres repositories
+
+## Étape 14
+
+**Objectif** : permettre au controller de renvoyer une vue HTML
+
+- adapter `app/src/Lib/Controllers/AbstractController.php` pour utiliser un template html et l'hydrater avant de la renvoyer dans la réponse
+- adapter `app/src/Lib/Http/Request.php` et `app/src/Lib/Http/Router.php` pour permettre de récupérer les slugs dans l'url

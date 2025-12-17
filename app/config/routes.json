@@ -1,11 +1,11 @@
 [
   {
-    "path": "/test",
+    "path": "/test/:id",
     "method": "GET",
     "controller": "TestController"
   },
   {
-    "path": "/foobarr",
+    "path": "/foobarr/:id",
     "method": "GET",
     "controller": "FoobarrController"
   }
