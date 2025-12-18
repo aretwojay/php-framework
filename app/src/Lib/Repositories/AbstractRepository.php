@@ -28,13 +28,18 @@ abstract class AbstractRepository
     public function __construct()
     {
         $dsn = new Dsn();
+        $dsn->addHostToDsn();
+        $dsn->addPortToDsn();
+        $dsn->addDbnameToDsn();
+        
         $db = new DatabaseConnexion();
         $db->setConnexion($dsn);
+        
         $this->db = $db;
     }
 
     public function getTable(): string {
-        return str_replace('manager','',strtolower((new \ReflectionClass($this))->getShortName()));
+        return str_replace('repository','',strtolower((new \ReflectionClass($this))->getShortName()));
     }
 
     private function getFields(AbstractEntity $entity): string {

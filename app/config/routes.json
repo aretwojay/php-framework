@@ -1,12 +1,27 @@
 [
   {
-    "path": "/test/:id",
+    "path": "/artist",
     "method": "GET",
-    "controller": "TestController"
+    "controller": "GetArtistsController"
   },
   {
-    "path": "/foobarr/:id",
+    "path": "/artist/:id",
     "method": "GET",
-    "controller": "FoobarrController"
+    "controller": "GetArtistController"
+  },
+  {
+    "path": "/artist",
+    "method": "POST",
+    "controller": "PostArtistController"
+  },
+  {
+    "path": "/artist/:id",
+    "method": "PATCH",
+    "controller": "PatchArtistController"
+  },
+  {
+    "path": "/artist/:id",
+    "method": "DELETE",
+    "controller": "DeleteArtistController"
   }
 ]
