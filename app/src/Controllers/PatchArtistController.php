@@ -1,10 +1,7 @@
 <?php
 
-
-
 namespace App\Controllers;
 
-use App\Entities\Artist;
 use App\Lib\Http\Request;
 use App\Lib\Http\Response;
 use App\Lib\Controllers\AbstractController;
@@ -23,7 +20,7 @@ class PatchArtistController extends AbstractController {
         
         $artist->name = 'New name';
 
-        $artist->id = $artistRepository->update($artist);
+        $artistRepository->update($artist);
 
         return new Response(json_encode($artist), 200, ['Content-Type' => 'application/json']);
     }
