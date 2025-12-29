@@ -14,8 +14,8 @@ use App\Lib\Entities\AbstractEntity;
 
 class CreateSchema extends AbstractCommand {
 
-    const string ENTITIES_NAMESPACE_PREFIX = "App\\Entities\\";
-    const string CREATE_TABLE_FORMAT = 'CREATE TABLE IF NOT EXISTS %s (%s);';
+    const ENTITIES_NAMESPACE_PREFIX = "App\\Entities\\";
+    const CREATE_TABLE_FORMAT = 'CREATE TABLE IF NOT EXISTS %s (%s);';
 
     public function execute(): void {
         $entitiesClasses = self::getEntitiesClasses();

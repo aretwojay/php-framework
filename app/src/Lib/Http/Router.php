@@ -7,8 +7,8 @@ use App\Lib\Controllers\AbstractController;
 
 class Router {
 
-    const string CONTROLLER_NAMESPACE_PREFIX = "App\\Controllers\\";
-    const string ROUTE_CONFIG_PATH = __DIR__ . '/../../../config/routes.json';
+    const CONTROLLER_NAMESPACE_PREFIX = "App\\Controllers\\";
+    const ROUTE_CONFIG_PATH = __DIR__ . '/../../../config/routes.json';
     
 
     public static function route(Request $request): Response {
