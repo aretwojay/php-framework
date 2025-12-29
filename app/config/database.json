@@ -1,5 +1,5 @@
 {
-  "host": "php-framework-mysql",
+  "host": "php-mysql-framework",
   "user": "root",
   "password": "password",
   "database": "test",

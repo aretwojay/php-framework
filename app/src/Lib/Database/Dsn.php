@@ -3,7 +3,7 @@
 namespace App\Lib\Database;
 
 class Dsn {
-    const string DATABASE_CONFIG_PATH = __DIR__ . '/../../../config/database.json';
+    const DATABASE_CONFIG_PATH = __DIR__ . '/../../../config/database.json';
     
     private string $host;
     private string $user;

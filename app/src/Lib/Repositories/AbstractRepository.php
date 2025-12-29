@@ -39,7 +39,7 @@ abstract class AbstractRepository
     }
 
     public function getTable(): string {
-        return str_replace('repository','',strtolower((new \ReflectionClass($this))->getShortName()));
+        return str_replace('Repository','',(new \ReflectionClass($this))->getShortName());
     }
 
     private function getFields(AbstractEntity $entity): string {
@@ -100,7 +100,7 @@ abstract class AbstractRepository
     public function from(string $tableAlias): self {
         $table = $this->getTable();
         $this->queryString .= " FROM $table";
-
+        
         return $this->as($tableAlias);
     }
 
