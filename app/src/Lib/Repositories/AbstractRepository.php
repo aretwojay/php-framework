@@ -250,4 +250,11 @@ abstract class AbstractRepository
             ->addParam('id', $entity->getId())
             ->executeQuery();
     }
+
+    public function debug(): self
+    {
+        var_dump($this->queryString);
+        var_dump($this->params);
+        return $this;
+    }
 }
