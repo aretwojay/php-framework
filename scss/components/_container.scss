@@ -1,0 +1,14 @@
+@use "../partials/variables" as v;
+@layer components {
+  .container {
+    margin-inline: 2rem;
+    @each $name, $size in v.$breakpoints {
+      @media (width > $size) {
+        @if ($name == "sm") {
+          margin-inline: auto;
+        }
+        max-width: calc($size - 4rem);
+      }
+    }
+  }
+}

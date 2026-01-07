@@ -1,0 +1,10 @@
+@layer utilities {
+  @for $i from 0 through 6 {
+    .m--#{$i} {
+      margin: calc($i * var(--spacing));
+    }
+    .p--#{$i} {
+      padding: calc($i * var(--spacing));
+    }
+  }
+}
