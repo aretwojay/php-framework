@@ -1,7 +1,7 @@
 {
-  "host": "db",
-  "user": "root",
-  "password": "password",
-  "database": "test",
-  "port": 3306
+    "host": "db",
+    "port": 3306,
+    "database": "mydb",
+    "username": "root",
+    "password": "rootpassword"
 }
