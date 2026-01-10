@@ -2,3 +2,4 @@
 app/vendor
 log
 mysql
+.env
