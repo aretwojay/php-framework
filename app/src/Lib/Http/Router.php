@@ -8,31 +8,35 @@ use App\Lib\Controllers\AbstractController;
 class Router {
 
     const string CONTROLLER_NAMESPACE_PREFIX = "App\\Controllers\\";
-    const string ROUTE_CONFIG_PATH = __DIR__ . '/../../../config/routes.json';
+    private array $routes = [];
     
+    
+    public function add(string $method, string $path, array $controller): void{
+        $this->routes[] = [
+            'method' => strtoupper($method),
+            'path' => $path,
+            'controller' => $controller
+        ];
+    }
 
-    public static function route(Request $request): Response {
-        $config = self::getConfig();
+   public function run(Request $request): Response{
+        
+        foreach ($this->routes as $route) {
 
-        foreach($config as $route) {
-            if(self::checkMethod($request, $route) === false || self::checkUri($request, $route) === false) {
+            if (self::checkMethod($request, $route) === false) {
+                continue;
+            }
+
+            if (self::checkUri($request, $route) === false) {
                 continue;
             }
 
             $controller = self::getControllerInstance($route['controller']);
+
             return $controller->process($request);
         }
-
-        throw new \Exception('Route not found', 404);
+        throw new \Exception('No matching route found', 404);
     }
-    
-    private static function getConfig(): array {
-        $routesConfigContent = file_get_contents(self::ROUTE_CONFIG_PATH);
-        $routesConfig = json_decode($routesConfigContent, true);
-
-        return $routesConfig;
-    }
-
 
     private static function checkMethod(Request $request, array $route): bool {
         return $request->getMethod() === $route['method'];
@@ -86,5 +90,4 @@ class Router {
     private static function isUrlPartSlug(string $part): bool {
         return strpos($part, ':') === 0;
     }
-
 }
