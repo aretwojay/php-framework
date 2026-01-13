@@ -6,7 +6,12 @@ use App\Lib\Http\Request;
 use App\Lib\Http\Response;
 
 abstract class AbstractController {
-    public abstract function process(Request $request): Response;
+    protected Request $request;
+
+    public function __construct(Request $request)
+    {
+        $this->request = $request;
+    }
 
     protected function render(string $template, array $data = []): Response
     {
