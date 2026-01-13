@@ -10,10 +10,7 @@ try { // exemple d'utilisation ( add et run )
     $request = new Request();
     $router = new Router();
 
-    
-    $router->add('GET', '/artist', ['GetArtistsController', 'process']);
-    $router->add('GET', '/artist/:id', ['GetArtistController', 'process']);
-    $router->add('POST', '/artist', ['PostArtistController', 'process']);
+    $router->add('GET', '/hello/:name', [\App\Controllers\TestController::class, 'hey']);
 
     $response = $router->run($request);
 
@@ -21,9 +18,11 @@ try { // exemple d'utilisation ( add et run )
     http_response_code($response->getStatus());
     echo $response->getContent();
     exit();
-} catch(\Exception $e) {
+} catch (\Exception $e) {
+    http_response_code($e->getCode() ?: 500);
     echo $e->getMessage();
 }
+
 
 $request = new Request();
 

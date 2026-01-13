@@ -6,7 +6,8 @@ use App\Lib\Controllers\AbstractController;
 
 
 class Router {
-
+    private const ERROR_NO_ROUTE = 'No matching route found';
+    
     const string CONTROLLER_NAMESPACE_PREFIX = "App\\Controllers\\";
     private array $routes = [];
     
@@ -19,23 +20,22 @@ class Router {
         ];
     }
 
-   public function run(Request $request): Response{
-        
+    public function run(Request $request): Response
+    {
         foreach ($this->routes as $route) {
 
-            if (self::checkMethod($request, $route) === false) {
+            if (!self::checkMethod($request, $route)) {
                 continue;
             }
 
-            if (self::checkUri($request, $route) === false) {
+            if (!self::checkUri($request, $route)) {
                 continue;
             }
 
-            $controller = self::getControllerInstance($route['controller']);
-
-            return $controller->process($request);
+            return self::dispatch($route['controller'], $request);
         }
-        throw new \Exception('No matching route found', 404);
+
+        throw new \Exception(self::ERROR_NO_ROUTE, 404);
     }
 
     private static function checkMethod(Request $request, array $route): bool {
@@ -56,28 +56,28 @@ class Router {
                     return false;
                 }
             }else{
-                $request->addSlug(substr($part, 1), $requestUriParts[$key]);
+                $request->addSlug(substr($part, 1),  trim(urldecode($requestUriParts[$key])));
             }
         }
 
         return true;
     }
     
-    private static function getControllerInstance(string $controller): AbstractController {
-        $controllerClass = self::CONTROLLER_NAMESPACE_PREFIX . $controller;
-
-        if(class_exists($controllerClass) === false) {
-            throw new \Exception('Route not found', 404);
-        }
-
-        $controllerInstance = new $controllerClass();
-
-        if(is_subclass_of($controllerInstance, AbstractController::class)=== false){
-            throw new \Exception('Route not found', 404);
-        }
+    private static function getControllerInstance(string $controllerClass,Request $request): AbstractController {
         
-        return $controllerInstance;
+        if (!class_exists($controllerClass)) {
+            throw new \Exception('Controller not found', 404);
+        }
+
+        $controller = new $controllerClass($request);
+
+        if (!is_subclass_of($controller, AbstractController::class)) {
+            throw new \Exception('Invalid controller', 500);
+        }
+
+        return $controller;
     }
+
 
     private static function getUrlParts(string $url): array {
         return explode('/', trim($url, '/'));
@@ -89,5 +89,39 @@ class Router {
 
     private static function isUrlPartSlug(string $part): bool {
         return strpos($part, ':') === 0;
+    }
+
+    private static function dispatch(array $controllerDefinition, Request $request): Response
+    {
+        [$controllerClass, $action] = $controllerDefinition;
+
+        if (!class_exists($controllerClass)) {
+            throw new \Exception(
+                sprintf('Controller "%s" not found', $controllerClass),
+                404
+            );
+        }
+
+        $controller = new $controllerClass($request);
+
+        if (!is_subclass_of($controller, AbstractController::class)) {
+            throw new \Exception(
+                sprintf('Controller "%s" is not a valid controller', $controllerClass),
+                500
+            );
+        }
+
+        if (!method_exists($controller, $action)) {
+            throw new \Exception(
+                sprintf(
+                    'Action "%s" not found on controller "%s"',
+                    $action,
+                    $controllerClass
+                ),
+                404
+            );
+        }
+
+        return $controller->$action();
     }
 }
