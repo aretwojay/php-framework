@@ -63,12 +63,14 @@ class Router {
         $controllerClass = self::CONTROLLER_NAMESPACE_PREFIX . $controller;
 
         if(class_exists($controllerClass) === false) {
+            var_dump(value: $controllerClass);
             throw new \Exception('Route not found', 404);
         }
 
         $controllerInstance = new $controllerClass();
 
         if(is_subclass_of($controllerInstance, AbstractController::class)=== false){
+            var_dump($controllerInstance, "73");
             throw new \Exception('Route not found', 404);
         }
         

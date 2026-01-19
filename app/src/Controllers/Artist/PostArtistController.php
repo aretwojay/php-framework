@@ -2,7 +2,7 @@
 
 
 
-namespace App\Controllers;
+namespace App\Controllers\Artist;
 
 use App\Entities\Artist;
 use App\Lib\Http\Request;

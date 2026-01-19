@@ -2,26 +2,31 @@
   {
     "path": "/artist",
     "method": "GET",
-    "controller": "GetArtistsController"
+    "controller": "Artist\\GetArtistsController"
+  },
+  {
+    "path": "/blog/artists",
+    "method": "GET",
+    "controller": "Artist\\DisplayArtistsController"
   },
   {
     "path": "/artist/:id",
     "method": "GET",
-    "controller": "GetArtistController"
+    "controller": "Artist\\GetArtistController"
   },
   {
     "path": "/artist",
     "method": "POST",
-    "controller": "PostArtistController"
+    "controller": "Artist\\PostArtistController"
   },
   {
     "path": "/artist/:id",
     "method": "PATCH",
-    "controller": "PatchArtistController"
+    "controller": "Artist\\PatchArtistController"
   },
   {
     "path": "/artist/:id",
     "method": "DELETE",
-    "controller": "DeleteArtistController"
+    "controller": "Artist\\DeleteArtistController"
   }
 ]

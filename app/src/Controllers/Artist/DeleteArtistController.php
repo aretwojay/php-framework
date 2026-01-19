@@ -1,14 +1,14 @@
 <?php
 
 
-namespace App\Controllers;
+namespace App\Controllers\Artist;
 
 use App\Lib\Http\Request;
 use App\Lib\Http\Response;
 use App\Lib\Controllers\AbstractController;
 use App\Repositories\ArtistRepository;
 
-class GetArtistController extends AbstractController {
+class DeleteArtistController extends AbstractController {
     public function process(Request $request): Response
     {
         $artistRepository = new ArtistRepository();
@@ -19,7 +19,9 @@ class GetArtistController extends AbstractController {
             return new Response(json_encode(['error' => 'not found']), 404, ['Content-Type' => 'application/json']);
         }
 
-        return new Response(json_encode($artist), 200, ['Content-Type' => 'application/json']);
+        $artistRepository->remove($artist);
+
+        return new Response('', 204, ['Content-Type' => 'application/json']);
     }
     
 }
