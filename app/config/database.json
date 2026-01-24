@@ -2,6 +2,6 @@
   "host": "db",
   "user": "root",
   "password": "password",
-  "database": "test",
+  "database": "db",
   "port": 3306
 }

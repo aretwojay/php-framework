@@ -119,7 +119,7 @@ class CreateSchema extends AbstractCommand {
             $propertiesStatement .= self::getSqlPropertyScript($propertyAnnotationsDump);
         }
 
-        return sprintf(self::CREATE_TABLE_FORMAT, (new \ReflectionClass($className))->getShortName(), rtrim($propertiesStatement, ','));
+        return sprintf(self::CREATE_TABLE_FORMAT,  strtolower((new \ReflectionClass($className))->getShortName()), rtrim($propertiesStatement, ','));
     }
     
     private static function getSqlPropertyScript(PropertyAnnotationsDump $propertyAnnotationsDump): string {

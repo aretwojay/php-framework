@@ -39,7 +39,7 @@ abstract class AbstractRepository
     }
 
     public function getTable(): string {
-        return str_replace('Repository','',(new \ReflectionClass($this))->getShortName());
+        return strtolower(str_replace('Repository','',(new \ReflectionClass($this))->getShortName()));
     }
 
     private function getFields(AbstractEntity $entity): string {
