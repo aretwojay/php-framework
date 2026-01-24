@@ -48,5 +48,40 @@
     "path": "/logout",
     "method": "GET",
     "controller": "AuthController"
+  },
+  {
+    "path": "/posts",
+    "method": "GET",
+    "controller": "PostController"
+  },
+  {
+    "path": "/posts/create",
+    "method": "GET",
+    "controller": "PostController"
+  },
+  {
+    "path": "/posts/create",
+    "method": "POST",
+    "controller": "PostController"
+  },
+  {
+    "path": "/posts/{id}/edit",
+    "method": "GET",
+    "controller": "PostController"
+  },
+  {
+    "path": "/posts/{id}/edit",
+    "method": "POST",
+    "controller": "PostController"
+  },
+  {
+    "path": "/posts/{id}/delete",
+    "method": "POST",
+    "controller": "PostController"
+  },
+  {
+    "path": "/api/posts",
+    "method": "GET",
+    "controller": "PostController"
   }
 ]
