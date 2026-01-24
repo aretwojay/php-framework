@@ -23,5 +23,30 @@
     "path": "/artist/:id",
     "method": "DELETE",
     "controller": "DeleteArtistController"
+  },
+  {
+    "path": "/login",
+    "method": "GET",
+    "controller": "AuthController"
+  },
+  {
+    "path": "/login",
+    "method": "POST",
+    "controller": "AuthController"
+  },
+  {
+    "path": "/register",
+    "method": "GET",
+    "controller": "AuthController"
+  },
+  {
+    "path": "/register",
+    "method": "POST",
+    "controller": "AuthController"
+  },
+  {
+    "path": "/logout",
+    "method": "GET",
+    "controller": "AuthController"
   }
 ]
