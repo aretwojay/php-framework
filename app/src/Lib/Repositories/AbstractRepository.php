@@ -253,8 +253,6 @@ abstract class AbstractRepository
 
     public function debug(): self
     {
-        var_dump($this->queryString);
-        var_dump($this->params);
         return $this;
     }
 }

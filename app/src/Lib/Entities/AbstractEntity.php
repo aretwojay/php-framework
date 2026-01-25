@@ -13,7 +13,11 @@ abstract class AbstractEntity {
         foreach ($properties as $property) {
             $property->setAccessible(true);
             if ($property->isInitialized($this)) {
-                $array[$property->getName()] = $property->getValue($this);
+                $value = $property->getValue($this);
+                if (is_bool($value)) {
+                    $value = (int) $value;
+                }
+                $array[$property->getName()] = $value;
             }
         }
         return $array;

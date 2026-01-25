@@ -41,9 +41,10 @@ class Post extends AbstractEntity
         return $this->title;
     }
 
-    public function setTitle(string $title): void
+    public function setTitle(string $title): self
     {
         $this->title = $title;
+        return $this;
     }
 
     public function getSlug(): string
@@ -51,9 +52,10 @@ class Post extends AbstractEntity
         return $this->slug;
     }
 
-    public function setSlug(string $slug): void
+    public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+        return $this;
     }
 
     public function getContent(): string
@@ -61,9 +63,10 @@ class Post extends AbstractEntity
         return $this->content;
     }
 
-    public function setContent(string $content): void
+    public function setContent(string $content): self
     {
         $this->content = $content;
+        return $this;
     }
 
     public function isPublished(): bool
@@ -71,13 +74,20 @@ class Post extends AbstractEntity
         return $this->published;
     }
 
-    public function setPublished(bool $published): void
+    public function setPublished(bool $published): self
     {
         $this->published = $published;
+        return $this;
     }
 
     public function getCreatedAt(): string
     {
         return $this->createdAt;
+    }
+
+    public function setCreatedAt(string $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+        return $this;
     }
 }

@@ -65,17 +65,17 @@
     "controller": "PostController"
   },
   {
-    "path": "/posts/{id}/edit",
+    "path": "/posts/:id/edit",
     "method": "GET",
     "controller": "PostController"
   },
   {
-    "path": "/posts/{id}/edit",
+    "path": "/posts/:id/edit",
     "method": "POST",
     "controller": "PostController"
   },
   {
-    "path": "/posts/{id}/delete",
+    "path": "/posts/:id/delete",
     "method": "POST",
     "controller": "PostController"
   },
