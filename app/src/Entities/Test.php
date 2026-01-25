@@ -9,7 +9,7 @@ use App\Lib\Entities\AbstractEntity;
 class Test {
 
     #[Id]
-    #[Column(type: 'varchar', size: 255)]
+    #[Column(type: 'varchar', size: 255, unique: true)]
     public string $email;
 
     #[Column(type: 'varchar', size: 255)]

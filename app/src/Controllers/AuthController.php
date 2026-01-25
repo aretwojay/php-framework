@@ -50,7 +50,6 @@ class AuthController extends AbstractController
         $password = $_POST['password'] ?? '';
         
         $errors = [];
-        var_dump($email, $password, $errors);
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $errors[] = "Email invalide.";
