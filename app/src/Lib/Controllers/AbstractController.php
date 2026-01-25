@@ -13,7 +13,7 @@ abstract class AbstractController {
         $response = new Response();
         extract($data);
         ob_start();
-        require_once __DIR__ . "/../../../views/{$template}.html";
+        require_once __DIR__ . "/../../../views/{$template}.php";
         $response->setContent(ob_get_clean());
         $response->addHeader('Content-Type', 'text/html');
 

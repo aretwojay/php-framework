@@ -43,21 +43,11 @@ abstract class AbstractRepository
     }
 
     private function getFields(AbstractEntity $entity): string {
-        $fields = [];
-        foreach ($entity->toArray() as $key => $value) {
-            $fields[] = $key;
-        }
-
-        return implode(', ', $fields);
+        return implode(', ', array_keys($entity->toArray()));
     }
 
     private function getValues(AbstractEntity $entity): string {
-        $values = [];
-        foreach ($entity->toArray() as $key => $value) {
-            $values[] = ':' . $key;
-        }
-
-        return implode(', ', $values);
+        return implode(', ', array_map(fn($k) => ":$k", array_keys($entity->toArray())));
     }
 
     public function queryBuilder(): self {
@@ -67,13 +57,7 @@ abstract class AbstractRepository
 
     public function select(...$fields): self {
         $this->queryString .= "SELECT";
-
-        if(count($fields) === 0) {
-            $this->queryString .= ' *';
-            return $this;
-        }
-
-        $this->queryString .= ' ' . implode(', ', $fields);
+        $this->queryString .= count($fields) === 0 ? ' *' : ' ' . implode(', ', $fields);
         return $this;
     }
 
@@ -100,7 +84,6 @@ abstract class AbstractRepository
     public function from(string $tableAlias): self {
         $table = $this->getTable();
         $this->queryString .= " FROM $table";
-        
         return $this->as($tableAlias);
     }
 
@@ -111,24 +94,18 @@ abstract class AbstractRepository
     }
 
     public function andWhere(string $field, string $condition, ?string $table = null): self {
-        $this->queryString .= " AND  ";
+        $this->queryString .= " AND ";
         return $this->where($field, $condition, $table);
     }
 
     public function orWhere(string $field, string $condition, ?string $table = null): self {
-        $this->queryString .= " OR  ";
+        $this->queryString .= " OR ";
         return $this->where($field, $condition, $table);
     }
 
     public function where(string $field, string $condition, ?string $table = null): self {
-        $this->queryString .= " WHERE ";
-        if($table !== null) {
-            $this->queryString .= "$table.";
-        }else {
-            $this->queryString .= "$this->tableAlias.";
-        }
-
-        $this->queryString .= "$field $condition :$field";
+        $this->queryString .= strpos($this->queryString, 'WHERE') === false ? " WHERE " : " AND ";
+        $this->queryString .= ($table ?? $this->tableAlias) . ".$field $condition :$field";
         return $this;
     }
 
@@ -144,22 +121,24 @@ abstract class AbstractRepository
 
     public function executeQuery(): self {
         $this->query = $this->db->getConnexion()->prepare($this->queryString);
-
         $this->query->execute($this->params);
         return $this;
     }
 
+    // -------------------- FETCH --------------------
     public function getOneResult() {
-        $this->query->setFetchMode(\PDO::FETCH_CLASS, 'App\Entities\\' . ucfirst($this->getTable()));
+        $class = 'App\Entities\\' . ucfirst($this->getTable());
+        $this->query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
         return $this->query->fetch();
     }
 
     public function getAllResults(): array {
-        $this->query->setFetchMode(\PDO::FETCH_CLASS, 'App\Entities\\' . ucfirst($this->getTable()));
+        $class = 'App\Entities\\' . ucfirst($this->getTable());
+        $this->query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
         return $this->query->fetchAll();
     }
 
-    public function find(string | int $id) {
+    public function find(string|int $id) {
         return $this->findOneBy(['id' => $id]);
     }
 
@@ -168,33 +147,16 @@ abstract class AbstractRepository
     }
 
     public function findBy(array $criteria) {
-        $this->queryBuilder()
-            ->select()
-            ->from(substr($this->getTable(), 0, 1))
-        ;
-
+        $this->queryBuilder()->select()->from(substr($this->getTable(), 0, 1));
         $this->addWhereAccordingToCriterias($criteria);
-
-        return $this->executeQuery()
-            ->getAllResults();
+        return $this->executeQuery()->getAllResults();
     }
 
     public function findOneBy(array $criteria) {
-        $this->queryBuilder()
-            ->select()
-            ->from(substr($this->getTable(), 0, 1))
-            ;
-
+        $this->queryBuilder()->select()->from(substr($this->getTable(), 0, 1));
         $this->addWhereAccordingToCriterias($criteria);
-
-        $data = $this->executeQuery()
-            ->getOneResult();
-
-        if($data === false) {
-            return null;
-        }
-
-        return $data;
+        $data = $this->executeQuery()->getOneResult();
+        return $data === false ? null : $data;
     }
 
     private function addWhereAccordingToCriterias(array $criterias) {
@@ -209,24 +171,16 @@ abstract class AbstractRepository
     }
 
     public function set(AbstractEntity $entity): self {
-
         $this->queryString .= " SET";
         foreach ($entity->toArray() as $key => $value) {
             $this->queryString .= " $key = :$key,";
         }
-
         $this->queryString = rtrim($this->queryString, ',');
-
         return $this;
     }
 
     public function save(AbstractEntity $entity): string {
-        $this->queryBuilder()
-            ->insert($entity)
-            ->values($entity)
-            ->setParams($entity->toArray())
-        ;
-
+        $this->queryBuilder()->insert($entity)->values($entity)->setParams($entity->toArray());
         $this->executeQuery();
         return $this->db->getConnexion()->lastInsertId();
     }
@@ -239,7 +193,6 @@ abstract class AbstractRepository
             ->where('id', self::CONDITIONS['eq'])
             ->setParams($entity->toArray())
             ->executeQuery();
-        $this->executeQuery();
     }
 
     public function remove(AbstractEntity $entity) {
@@ -251,8 +204,7 @@ abstract class AbstractRepository
             ->executeQuery();
     }
 
-    public function debug(): self
-    {
+    public function debug(): self {
         var_dump($this->queryString);
         var_dump($this->params);
         return $this;

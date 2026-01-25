@@ -14,24 +14,27 @@ class Post extends AbstractEntity
     #[Id]
     #[AutoIncrement]
     #[Column(type: 'int')]
-    protected int $id;
+    protected int $id = 0;
 
     #[Column(type: 'varchar', size: 255)]
-    protected string $title;
+    protected string $title = '';
 
     #[Column(type: 'varchar', size: 255, unique: true)]
-    protected string $slug;
+    protected string $slug = '';
 
     #[Column(type: 'text')]
-    protected string $content;
+    protected string $content = '';
 
     #[Column(type: 'datetime')]
-    protected string $createdAt;
+    protected string $created_at = '';
 
     #[Column(type: 'boolean')]
     protected bool $published = false;
 
-    public function getId(): int
+    #[Column(type: 'varchar', size: 255)]
+    protected ?string $author = null;
+
+    public function getId(): string|int
     {
         return $this->id;
     }
@@ -78,6 +81,21 @@ class Post extends AbstractEntity
 
     public function getCreatedAt(): string
     {
-        return $this->createdAt;
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(string $createdAt): void
+    {
+        $this->created_at = $createdAt;
+    }
+
+    public function getAuthor(): ?string
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(?string $author): void
+    {
+        $this->author = $author;
     }
 }
