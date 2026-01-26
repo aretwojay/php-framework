@@ -5,6 +5,8 @@ namespace App\Lib\Repositories;
 use App\Lib\Database\DatabaseConnexion;
 use App\Lib\Database\Dsn;
 use App\Lib\Entities\AbstractEntity;
+use App\Lib\Annotations\ORM\Column;
+use App\Lib\Annotations\ORM\References;
 
 abstract class AbstractRepository
 {
@@ -93,6 +95,16 @@ abstract class AbstractRepository
         return $this;
     }
 
+    public function innerJoin(string $table, string $alias, string $condition): self {
+        $this->queryString .= " INNER JOIN $table AS $alias ON $alias.id = $condition";
+        return $this;
+    }
+
+    public function leftJoin(string $table, string $alias, string $condition): self {
+        $this->queryString .= " LEFT JOIN $table AS $alias ON $alias.id = $condition";
+        return $this;
+    }
+
     public function andWhere(string $field, string $condition, ?string $table = null): self {
         $this->queryString .= " AND ";
         return $this->where($field, $condition, $table);
@@ -138,22 +150,46 @@ abstract class AbstractRepository
         return $this->query->fetchAll();
     }
 
-    public function find(string|int $id) {
-        return $this->findOneBy(['id' => $id]);
+    public function find(string|int $id, array $relations = []): ?AbstractEntity {
+        return $this->findOneBy(['id' => $id], $relations);
     }
 
-    public function findAll(): array {
-        return $this->findBy([]);
+    public function findAll(array $relations = []): array {
+        return $this->findBy([], $relations);
     }
 
-    public function findBy(array $criteria) {
-        $this->queryBuilder()->select()->from(substr($this->getTable(), 0, 1));
+    public function findBy(array $criteria, array $relations = []): array {
+        $alias = substr($this->getTable(), 0, 1);
+        $fields = [$alias . '.*'];
+        
+        foreach ($relations as $relationAlias => $config) {
+            if (isset($config['fields'])) {
+                foreach ($config['fields'] as $field) {
+                    $fields[] = $relationAlias . '.' . $field . ' AS ' . $relationAlias . '_' . $field;
+                }
+            }
+        }
+
+        $this->queryBuilder()->select(...$fields)->from($alias);
+        $this->addInnerJoinAccordingToRelations($relations);
         $this->addWhereAccordingToCriterias($criteria);
         return $this->executeQuery()->getAllResults();
     }
 
-    public function findOneBy(array $criteria) {
-        $this->queryBuilder()->select()->from(substr($this->getTable(), 0, 1));
+    public function findOneBy(array $criteria, array $relations = []) {
+        $alias = substr($this->getTable(), 0, 1);
+        $fields = [$alias . '.*'];
+        
+        foreach ($relations as $relationAlias => $config) {
+            if (isset($config['fields'])) {
+                foreach ($config['fields'] as $field) {
+                    $fields[] = $relationAlias . '.' . $field . ' AS ' . $relationAlias . '_' . $field;
+                }
+            }
+        }
+
+        $this->queryBuilder()->select(...$fields)->from($alias);
+        $this->addInnerJoinAccordingToRelations($relations);
         $this->addWhereAccordingToCriterias($criteria);
         $data = $this->executeQuery()->getOneResult();
         return $data === false ? null : $data;
@@ -167,6 +203,12 @@ abstract class AbstractRepository
                 $this->andWhere($key, self::CONDITIONS['eq']);
             }
             $this->addParam($key, $value);
+        }
+    }
+
+    private function addInnerJoinAccordingToRelations(array $relations) {
+        foreach($relations as $alias => $config) {
+            $this->innerJoin($config['table'], $alias, $config['condition']);
         }
     }
 

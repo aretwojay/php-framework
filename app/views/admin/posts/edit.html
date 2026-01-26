@@ -1,0 +1,50 @@
+<h1>Modifier l'article</h1>
+
+<?php if (isset($error)): ?>
+    <div style="color: red;"><?= $error ?></div>
+<?php endif; ?>
+
+<form action="/admin/posts/<?= $post->getId() ?>/edit" method="POST">
+  <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+
+  <div>
+    <label for="title">Titre:</label><br />
+    <input type="text" id="title" name="title" value="<?= htmlspecialchars($post->getTitle()) ?>" required />
+  </div>
+  <br />
+
+  <div>
+    <label for="content">Contenu:</label><br />
+    <textarea id="content" name="content" rows="10" cols="50"><?= htmlspecialchars($post->getContent()) ?></textarea>
+  </div>
+  <br />
+
+  <div>
+    <label for="user_id">Auteur:</label><br />
+    <select name="user_id" id="user_id">
+        <?php foreach ($users as $author): ?>
+            <option value="<?= $author->getId() ?>" <?= $post->getUser() === $author->getId() ? 'selected' : '' ?>>
+                <?= $author->getEmail() ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+  </div>
+  <br />
+
+  <div>
+    <label for="published">Publié:</label>
+    <input type="checkbox" id="published" name="published" value="1" <?= $post->isPublished() ? 'checked' : '' ?> />
+  </div>
+  <br />
+
+  <button type="submit">Mettre à jour</button>
+</form>
+
+<p>
+    <form action="/admin/posts/<?= $post->getId() ?>/delete" method="POST" onsubmit="return confirm('Supprimer cet article ?');">
+        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+        <button type="submit" style="color: red;">Supprimer</button>
+    </form>
+</p>
+
+<a href="/admin/posts">Retour à la liste</a>

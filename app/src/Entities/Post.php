@@ -6,7 +6,9 @@ use App\Lib\Annotations\ORM\ORM;
 use App\Lib\Annotations\ORM\Id;
 use App\Lib\Annotations\ORM\Column;
 use App\Lib\Annotations\ORM\AutoIncrement;
+use App\Lib\Annotations\ORM\References;
 use App\Lib\Entities\AbstractEntity;
+use App\Entities\User;
 
 #[ORM]
 class Post extends AbstractEntity
@@ -25,14 +27,15 @@ class Post extends AbstractEntity
     #[Column(type: 'text')]
     protected string $content;
 
-    #[Column(type: 'string')]
+    #[Column(type: 'datetime')]
     protected string $createdAt;
 
     #[Column(type: 'boolean')]
     protected bool $published = false;
 
-    #[Column(type: 'varchar', size: 255)]
-    protected ?string $author = null;
+    #[Column(type: 'int')]
+    #[References(class: User::class, property: 'id')]
+    protected User|int $user;
 
     public function getId(): string|int
     {
@@ -94,13 +97,14 @@ class Post extends AbstractEntity
         return $this;
     }
 
-    public function getAuthor(): ?string
+    public function getUser(): User|int
     {
-        return $this->author;
+        return $this->user;
     }
 
-    public function setAuthor(?string $author): void
+    public function setUser(User|int $user): self
     {
-        $this->author = $author;
+        $this->user = $user;
+        return $this;
     }
 }

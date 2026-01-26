@@ -8,13 +8,22 @@ use App\Lib\Http\Response;
 abstract class AbstractController {
     public abstract function process(Request $request): Response;
 
-    protected function render(string $template, array $data = []): Response
+    protected function render(string $template, array $data = [], ?string $layout = null): Response
     {
         $response = new Response();
         extract($data);
+        
         ob_start();
-        require_once __DIR__ . "/../../../views/{$template}.php";
-        $response->setContent(ob_get_clean());
+        require_once __DIR__ . "/../../../views/{$template}.html";
+        $content = ob_get_clean();
+
+        if ($layout) {
+            ob_start();
+            require_once __DIR__ . "/../../../views/layouts/{$layout}.html";
+            $content = ob_get_clean();
+        }
+
+        $response->setContent($content);
         $response->addHeader('Content-Type', 'text/html');
 
         return $response;

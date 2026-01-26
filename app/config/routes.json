@@ -61,6 +61,31 @@
     "controller": "AdminPostController"
   },
   {
+    "path": "/admin/posts/create",
+    "method": "GET",
+    "controller": "AdminPostController"
+  },
+  {
+    "path": "/admin/posts/create",
+    "method": "POST",
+    "controller": "AdminPostController"
+  },
+  {
+    "path": "/admin/posts/:id/edit",
+    "method": "GET",
+    "controller": "AdminPostController"
+  },
+  {
+    "path": "/admin/posts/:id/edit",
+    "method": "POST",
+    "controller": "AdminPostController"
+  },
+  {
+    "path": "/admin/posts/:id/delete",
+    "method": "POST",
+    "controller": "AdminPostController"
+  },
+  {
     "path": "/posts",
     "method": "GET",
     "controller": "PostController"
