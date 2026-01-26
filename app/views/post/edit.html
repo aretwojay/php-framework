@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit Post</title>
+  </head>
+  <body>
+    <h1>Edit Post</h1>
+
+    <?php if (isset($error)): ?>
+        <div style="color: red;"><?= $error ?></div>
+    <?php endif; ?>
+
+    <form action="/posts/<?= $post->getId() ?>/edit" method="POST">
+      <!-- CSRF Token -->
+      <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+
+      <div>
+        <label for="title">Title:</label><br />
+        <input type="text" id="title" name="title" value="<?= htmlspecialchars($post->getTitle()) ?>" required />
+      </div>
+
+      <br />
+
+      <div>
+        <label for="content">Content:</label><br />
+        <textarea
+          id="content"
+          name="content"
+          rows="10"
+          cols="50"
+          required
+        ><?= htmlspecialchars($post->getContent()) ?></textarea>
+      </div>
+
+      <br />
+
+      <div>
+        <label for="published">Published:</label>
+        <input type="checkbox" id="published" name="published" value="1" <?= $post->isPublished() ? 'checked' : '' ?> />
+      </div>
+
+      <br />
+
+      <button type="submit">Update Post</button>
+    </form>
+    
+    <p>
+        <form action="/posts/<?= $post->getId() ?>/delete" method="POST" onsubmit="return confirm('Are you sure?');">
+            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+            <button type="submit" style="color: red;">Delete Post</button>
+        </form>
+    </p>
+
+    <a href="/posts">Back to List</a>
+  </body>
+</html>

@@ -150,6 +150,10 @@ class CreateSchema extends AbstractCommand {
             $statement .= ' PRIMARY KEY';
         }
 
+        if($propertyAnnotationsDump->getAnnotation(Column::class)->unique === true) {
+            $statement .= ' UNIQUE';
+        }
+
         $statement .= ',';
 
         if($propertyAnnotationsDump->hasAnnotation(References::class) === true) {

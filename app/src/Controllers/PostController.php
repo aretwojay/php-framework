@@ -26,6 +26,11 @@ class PostController extends AbstractController
             $this->index();
             exit;
         }
+
+        if ($path === '/posts' && $method === 'GET') {
+            return $this->listPosts();
+        }
+
         if ($path === '/posts/create' && $method === 'GET') {
             return $this->showCreateForm();
         }
@@ -67,6 +72,17 @@ class PostController extends AbstractController
         http_response_code(200);
         echo json_encode($data);
     }
+
+    private function listPosts(): Response
+    {
+        $posts = $this->postRepository->findAll();
+
+        return $this->render('post/index', [
+            'posts'     => $posts,
+            'csrfToken' => Csrf::generate()
+        ]);
+    }
+
     private function showCreateForm(): Response
     {
         return $this->render('post/create', [
@@ -97,7 +113,8 @@ class PostController extends AbstractController
             'title'     => $title,
             'slug'      => $this->slugify($title),
             'content'   => $content,
-            'published' => false
+            'published' => array_key_exists('published', $_POST),
+            'createdAt' => date('Y-m-d H:i:s'),
         ]);
 
         return new Response('', 302, ['Location' => '/posts']);
@@ -146,7 +163,7 @@ class PostController extends AbstractController
         $post->setTitle($title);
         $post->setSlug($this->slugify($title));
         $post->setContent($content);
-        $post->setPublished(false);
+        $post->setPublished(array_key_exists('published', $_POST));
 
         $this->postRepository->update($post);
 
