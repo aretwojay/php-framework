@@ -5,6 +5,7 @@ namespace App\Controllers;
 use App\Lib\Controllers\AbstractController;
 use App\Lib\Http\Request;
 use App\Lib\Http\Response;
+use App\Core\Session;
 
 class DashboardController extends AbstractController
 {
@@ -15,9 +16,8 @@ class DashboardController extends AbstractController
 
     public function index(Request $request): Response
     {
-        $user = ['name' => 'Admin']; // Simule l'utilisateur connecté
+        $user = Session::get("user");
 
-        // Note: 'layouts/admin' refers to layouts/admin.html (extension handled by AbstractController)
         return $this->render(
             'admin/dashboard',               
             ['title' => 'Dashboard Admin', 'user' => $user],

@@ -27,7 +27,8 @@
   {
     "path": "/login",
     "method": "GET",
-    "controller": "AuthController"
+    "controller": "AuthController",
+    "middleware": "GuestMiddleware"
   },
   {
     "path": "/login",
@@ -37,7 +38,8 @@
   {
     "path": "/register",
     "method": "GET",
-    "controller": "AuthController"
+    "controller": "AuthController",
+    "middleware": "GuestMiddleware"
   },
   {
     "path": "/register",
@@ -53,71 +55,89 @@
     "method": "GET",
     "path": "/admin",
     "controller": "DashboardController",
-    "action": "index"
+    "action": "index",
+    "middleware": "AdminMiddleware"
   },
   {
     "method": "GET",
     "path": "/admin/posts",
-    "controller": "AdminPostController"
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
   },
   {
     "path": "/admin/posts/create",
     "method": "GET",
-    "controller": "AdminPostController"
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
   },
   {
     "path": "/admin/posts/create",
     "method": "POST",
-    "controller": "AdminPostController"
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
   },
   {
     "path": "/admin/posts/:id/edit",
     "method": "GET",
-    "controller": "AdminPostController"
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
   },
   {
     "path": "/admin/posts/:id/edit",
     "method": "POST",
-    "controller": "AdminPostController"
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
   },
   {
     "path": "/admin/posts/:id/delete",
     "method": "POST",
-    "controller": "AdminPostController"
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
   },
   {
     "path": "/posts",
     "method": "GET",
-    "controller": "PostController"
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
   },
   {
     "path": "/posts/create",
     "method": "GET",
-    "controller": "PostController"
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
   },
   {
     "path": "/posts/create",
     "method": "POST",
-    "controller": "PostController"
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
   },
   {
     "path": "/posts/:id/edit",
     "method": "GET",
-    "controller": "PostController"
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
   },
   {
     "path": "/posts/:id/edit",
     "method": "POST",
-    "controller": "PostController"
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
   },
   {
     "path": "/posts/:id/delete",
     "method": "POST",
-    "controller": "PostController"
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
   },
   {
     "path": "/api/posts",
     "method": "GET",
     "controller": "PostController"
+  },
+  {
+    "path": "/",
+    "method": "GET",
+    "controller": "HomeController"
   }
 ]

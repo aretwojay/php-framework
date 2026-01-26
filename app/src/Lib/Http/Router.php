@@ -19,6 +19,25 @@ class Router {
                 continue;
             }
 
+            // Middleware handling
+            if (isset($route['middleware'])) {
+                $middlewareName = $route['middleware'];
+                // Assume middleware is in App\Core namespace if not specified
+                $middlewareClass = strpos($middlewareName, '\\') !== false 
+                    ? $middlewareName 
+                    : "App\\Core\\" . $middlewareName;
+
+                if (class_exists($middlewareClass)) {
+                    $middleware = new $middlewareClass();
+                    if (method_exists($middleware, 'handle')) {
+                        $response = $middleware->handle($request);
+                        if ($response instanceof Response) {
+                            return $response;
+                        }
+                    }
+                }
+            }
+
             $controller = self::getControllerInstance($route['controller']);
             return $controller->process($request);
         }
