@@ -1,0 +1,63 @@
+@use "../partials/functions" as f;
+@use "../partials/variables" as v;
+@use "sass:color";
+
+@layer components {
+  // ================= TYPOGRAPHY =================
+  .typography {
+    // Titres
+    h1, h2, h3, h4, h5, h6 {
+      color: var(--text-color);
+      margin: f.rem(8) 0;
+      line-height: 1.2;
+      font-weight: 600;
+    }
+
+    h1 { font-size: f.rem(32); }
+    h2 { font-size: f.rem(28); }
+    h3 { font-size: f.rem(24); }
+    h4 { font-size: f.rem(20); }
+    h5 { font-size: f.rem(18); }
+    h6 { font-size: f.rem(16); }
+
+    // Paragraphes
+    p {
+      color: var(--text-color);
+      font-size: f.rem(16);
+      line-height: f.rem(24);
+      margin: f.rem(8) 0;
+    }
+
+    // Listes
+    ul, ol {
+      color: var(--text-color);
+      padding-left: f.rem(20);
+      margin-bottom: f.rem(16);
+    }
+
+    li {
+      margin-bottom: f.rem(8);
+    }
+
+    // Liens
+    a {
+      color: var(--blue);
+      text-decoration: none;
+      transition: color 0.2s;
+
+      &:hover {
+        color: var(--blue-hover);
+        text-decoration: underline;
+      }
+    }
+
+    // Citations
+    blockquote {
+      color: var(--grey);
+      border-left: 4px solid var(--lightgrey);
+      padding-left: f.rem(12);
+      font-style: italic;
+      margin: f.rem(12) 0;
+    }
+  }
+}
