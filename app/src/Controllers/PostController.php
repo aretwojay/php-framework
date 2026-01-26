@@ -9,16 +9,19 @@ use App\Lib\Http\Response;
 use App\Lib\Security\Csrf;
 use App\Repositories\PostRepository;
 use App\Repositories\UserRepository;
+use App\Services\Uploader;
 
 class PostController extends AbstractController
 {
     private PostRepository $postRepository;
     private UserRepository $userRepository;
+    private Uploader $uploader;
 
     public function __construct()
     {
         $this->postRepository = new PostRepository();
         $this->userRepository = new UserRepository();
+        $this->uploader = new Uploader();
     }
 
     public function process(Request $request): Response
@@ -122,10 +125,40 @@ class PostController extends AbstractController
         $userSession = Session::get('user');
         $user = $userSession ? $this->userRepository->find($userSession['id']) : null;
 
+        $image = null;
+        
+        // Check standard upload errors first
+        if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_OK && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+            $errorMessage = match($_FILES['image']['error']) {
+                UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => "Le fichier est trop volumineux (max " . ini_get('upload_max_filesize') . ").",
+                UPLOAD_ERR_PARTIAL => "Le fichier n'a été que partiellement téléchargé.",
+                UPLOAD_ERR_NO_TMP_DIR => "Le dossier temporaire est manquant.",
+                UPLOAD_ERR_CANT_WRITE => "Échec de l'écriture du fichier sur le disque.",
+                default => "Une erreur inconnue est survenue lors du téléchargement.",
+            };
+            
+            return $this->render('post/create', [
+                'error'     => $errorMessage,
+                'csrfToken' => Csrf::generate()
+            ]);
+        }
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] === UPLOAD_ERR_OK) {
+            try {
+                $image = $this->uploader->upload($_FILES['image']);
+            } catch (\Exception $e) {
+                return $this->render('post/create', [
+                    'error'     => "Erreur d'upload : " . $e->getMessage(),
+                    'csrfToken' => Csrf::generate()
+                ]);
+            }
+        }
+
         $this->postRepository->create([
             'title'     => $title,
             'slug'      => $this->slugify($title),
             'content'   => $content,
+            'image'     => $image,
             'published' => array_key_exists('published', $_POST),
             'createdAt' => date('Y-m-d H:i:s'),
             'user'      => $user
@@ -172,6 +205,37 @@ class PostController extends AbstractController
                 'error'     => 'Le titre est obligatoire.',
                 'csrfToken' => Csrf::generate()
             ]);
+        }
+
+        // Handle Image Update
+        if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+            // Check for upload errors
+            if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+                 $errorMessage = match($_FILES['image']['error']) {
+                    UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => "Le fichier est trop volumineux (max " . ini_get('upload_max_filesize') . ").",
+                    UPLOAD_ERR_PARTIAL => "Le fichier n'a été que partiellement téléchargé.",
+                    UPLOAD_ERR_NO_TMP_DIR => "Le dossier temporaire est manquant.",
+                    UPLOAD_ERR_CANT_WRITE => "Échec de l'écriture du fichier sur le disque.",
+                    default => "Une erreur inconnue est survenue lors du téléchargement.",
+                };
+                return $this->render('post/edit', [
+                    'post'      => $post,
+                    'error'     => $errorMessage,
+                    'csrfToken' => Csrf::generate()
+                ]);
+            }
+
+            // Process valid upload
+            try {
+                $image = $this->uploader->upload($_FILES['image']);
+                $post->setImage($image);
+            } catch (\Exception $e) {
+                return $this->render('post/edit', [
+                    'post'      => $post,
+                    'error'     => "Erreur d'upload : " . $e->getMessage(),
+                    'csrfToken' => Csrf::generate()
+                ]);
+            }
         }
 
         $post->setTitle($title);
