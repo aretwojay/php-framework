@@ -1,0 +1,43 @@
+<h1>Créer un article</h1>
+
+<?php if (isset($error)): ?>
+<div style="color: red"><?= $error ?></div>
+<?php endif; ?>
+
+<form action="/admin/posts/create" method="POST">
+  <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+
+  <div>
+    <label for="title">Titre:</label><br />
+    <input type="text" id="title" name="title" required />
+  </div>
+  <br />
+
+  <div>
+    <label for="content">Contenu:</label><br />
+    <textarea id="content" name="content" rows="10" cols="50"></textarea>
+  </div>
+  <br />
+
+  <div>
+    <label for="user_id">Auteur:</label><br />
+    <select name="user_id" id="user_id">
+      <?php foreach ($users as $author): ?>
+      <option value="<?= $author->getId() ?>">
+        <?= $author->getEmail() ?>
+      </option>
+      <?php endforeach; ?>
+    </select>
+  </div>
+  <br />
+
+  <div>
+    <label for="published">Publié:</label>
+    <input type="checkbox" id="published" name="published" value="1" />
+  </div>
+  <br />
+
+  <button type="submit">Enregistrer</button>
+</form>
+
+<a href="/admin/posts">Retour à la liste</a>

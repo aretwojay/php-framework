@@ -2,19 +2,23 @@
 
 namespace App\Controllers;
 
+use App\Core\Session;
 use App\Lib\Controllers\AbstractController;
 use App\Lib\Http\Request;
 use App\Lib\Http\Response;
 use App\Lib\Security\Csrf;
 use App\Repositories\PostRepository;
+use App\Repositories\UserRepository;
 
 class PostController extends AbstractController
 {
     private PostRepository $postRepository;
+    private UserRepository $userRepository;
 
     public function __construct()
     {
         $this->postRepository = new PostRepository();
+        $this->userRepository = new UserRepository();
     }
 
     public function process(Request $request): Response
@@ -58,7 +62,7 @@ class PostController extends AbstractController
 
     private function index(): void
     {
-        $posts = $this->postRepository->findPublished();
+        $posts = $this->postRepository->findAll();
 
         $data = array_map(static function ($post) {
             return [
@@ -75,7 +79,13 @@ class PostController extends AbstractController
 
     private function listPosts(): Response
     {
-        $posts = $this->postRepository->findAll();
+        $userSession = Session::get('user');
+        $userId = $userSession['id'];
+        $posts = $this->postRepository->findBy((["user" => $userId]), ["user" => [
+            "table" => "user",
+            "condition" => "p.user",
+            "fields" => ["id", "email"]
+        ]]);
 
         return $this->render('post/index', [
             'posts'     => $posts,
@@ -109,12 +119,16 @@ class PostController extends AbstractController
             ]);
         }
 
+        $userSession = Session::get('user');
+        $user = $userSession ? $this->userRepository->find($userSession['id']) : null;
+
         $this->postRepository->create([
             'title'     => $title,
             'slug'      => $this->slugify($title),
             'content'   => $content,
             'published' => array_key_exists('published', $_POST),
             'createdAt' => date('Y-m-d H:i:s'),
+            'user'      => $user
         ]);
 
         return new Response('', 302, ['Location' => '/posts']);

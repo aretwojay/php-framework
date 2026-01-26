@@ -26,7 +26,7 @@ class User extends AbstractEntity
     private string $role = 'user';
 
     #[Column(type: 'datetime')]
-    private string $created_at;
+    private string $createdAt;
 
     public function getId(): int
     {
@@ -74,12 +74,12 @@ class User extends AbstractEntity
 
     public function getCreatedAt(): string
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     public function setCreatedAt(string $createdAt): self
     {
-        $this->created_at = $createdAt;
+        $this->createdAt = $createdAt;
         return $this;
     }
 }

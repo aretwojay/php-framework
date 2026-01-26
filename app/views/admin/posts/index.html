@@ -1,0 +1,48 @@
+<h1>Liste des articles</h1>
+<a href="/admin/posts/create" class="button">Créer un article</a>
+
+<table class="admin-table">
+  <thead>
+    <tr class="admin-table__header">
+      <th class="admin-table__cell">ID</th>
+      <th class="admin-table__cell">Titre</th>
+      <th class="admin-table__cell">Auteur</th>
+      <th class="admin-table__cell">Date</th>
+      <th class="admin-table__cell">Statut</th>
+      <th class="admin-table__cell">Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <?php foreach ($posts as $post): ?>
+    <tr class="admin-table__row">
+      <td class="admin-table__cell"><?= htmlspecialchars($post->getId()) ?></td>
+      <td class="admin-table__cell">
+        <?= htmlspecialchars($post->getTitle()) ?>
+      </td>
+      <td class="admin-table__cell">
+        <?= $post->getUser() instanceof \App\Entities\User ?
+        htmlspecialchars($post->getUser()->getEmail()) :
+        htmlspecialchars($post->getUser()) ?>
+      </td>
+      <td class="admin-table__cell">
+        <?= htmlspecialchars($post->getCreatedAt()) ?>
+      </td>
+      <td class="admin-table__cell">
+        <?= $post->isPublished() ? 'Publié' : 'Brouillon' ?>
+      </td>
+      <td class="admin-table__cell admin-table__actions">
+        <a href="/admin/posts/<?= $post->getId() ?>/edit">Éditer</a>
+        <form
+          action="/admin/posts/<?= $post->getId() ?>/delete"
+          method="POST"
+          style="display: inline"
+          onsubmit="return confirm('Supprimer cet article ?');"
+        >
+          <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+          <button type="submit">Supprimer</button>
+        </form>
+      </td>
+    </tr>
+    <?php endforeach; ?>
+  </tbody>
+</table>
