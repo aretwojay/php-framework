@@ -90,7 +90,7 @@ class PostController extends AbstractController
         return $this->render('post/index', [
             'posts'     => $posts,
             'csrfToken' => Csrf::generate()
-        ]);
+        ], "home");
     }
 
     private function showCreateForm(): Response
@@ -98,7 +98,7 @@ class PostController extends AbstractController
         return $this->render('post/create', [
             'error'     => null,
             'csrfToken' => Csrf::generate()
-        ]);
+        ], "home");
     }
 
     private function handleCreate(): Response
@@ -146,7 +146,7 @@ class PostController extends AbstractController
             'post'      => $post,
             'error'     => null,
             'csrfToken' => Csrf::generate()
-        ]);
+        ], "home");
     }
 
     private function handleUpdate(int $id): Response

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><?= $title ?? 'Accueil' ?></title>
+    <link rel="stylesheet" href="/css/main.css" />
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="/">Accueil</a>
+        <a href="/posts">Articles</a>
+        <?php if (\App\Core\Session::get('user')): ?>
+        <a href="/admin">Dashboard</a>
+        <a href="/logout">Déconnexion</a>
+        <?php else: ?>
+        <a href="/login">Connexion</a>
+        <a href="/register">Inscription</a>
+        <?php endif; ?>
+      </nav>
+    </header>
+
+    <main><?= $content ?></main>
+
+    <footer>
+      <p>&copy; <?= date('Y') ?> Mon Framework PHP</p>
+    </footer>
+  </body>
+</html>
