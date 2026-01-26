@@ -6,6 +6,7 @@ use App\Core\Session;
 use App\Lib\Controllers\AbstractController;
 use App\Lib\Http\Request;
 use App\Lib\Http\Response;
+use App\Lib\Repositories\AbstractRepository;
 use App\Lib\Security\Csrf;
 use App\Repositories\PostRepository;
 use App\Repositories\UserRepository;
@@ -274,5 +275,18 @@ class PostController extends AbstractController
         $text = preg_replace('/[^a-z0-9]+/', '-', $text);
 
         return trim($text, '-');
+    }
+
+    public function debugTest(): Response
+    {
+        $this ->postRepository
+            ->queryBuilder()
+            ->select()
+            ->from('post')
+            ->where('id',AbstractRepository::CONDITIONS['eq'])
+            ->addParam('id', 1)
+            ->debug()
+            ->executeQuery();
+        die;
     }
 }

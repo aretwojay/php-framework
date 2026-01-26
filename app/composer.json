@@ -1,6 +1,6 @@
 {
-  "name": "root/html",
-  "description": "A custom PHP framework",
+  "name": "decode/headless-cms",
+  "description": "A custom PHP headless CMS framework",
   "license": "MIT",
   "type": "project",
   "autoload": {

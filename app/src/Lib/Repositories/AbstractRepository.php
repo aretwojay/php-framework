@@ -16,7 +16,7 @@ abstract class AbstractRepository
     protected array $params = [];
     protected \PDOStatement $query;
 
-    const CONDITIONS = [
+    public const CONDITIONS = [
         'eq' => '=',
         'neq' => '!=',
         'lt' => '<',
@@ -248,6 +248,7 @@ abstract class AbstractRepository
 
     public function debug(): self
     {
+        var_dump($this->queryString, $this->params);
         return $this;
     }
 }
