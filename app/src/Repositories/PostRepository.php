@@ -21,6 +21,7 @@ class PostRepository extends AbstractRepository
         $post->setTitle($data['title']);
         $post->setSlug($data['slug']);
         $post->setContent($data['content']);
+        $post->setImage($data['image'] ?? null);
         $post->setPublished($data['published'] ?? false);
         $post->setCreatedAt($data['createdAt']);
         if (isset($data['user'])) {

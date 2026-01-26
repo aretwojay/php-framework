@@ -8,6 +8,7 @@ use App\Lib\Http\Request;
 use App\Lib\Http\Response;
 use App\Repositories\PostRepository;
 use App\Repositories\UserRepository;
+use App\Services\Uploader;
 
 use App\Lib\Security\Csrf;
 
@@ -15,11 +16,13 @@ class AdminPostController extends AbstractController
 {
     private PostRepository $postRepository;
     private UserRepository $userRepository;
+    private Uploader $uploader;
 
     public function __construct()
     {
         $this->postRepository = new PostRepository();
         $this->userRepository = new UserRepository();
+        $this->uploader = new Uploader();
     }
 
     public function process(Request $request): Response
@@ -106,10 +109,33 @@ class AdminPostController extends AbstractController
             $user = $this->userRepository->find($userSession['id']);
         }
 
+        $image = null;
+        if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+            if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+                $users = $this->userRepository->findAll();
+                return $this->render('admin/posts/create', [
+                    'error' => "Erreur d'upload.",
+                    'csrfToken' => Csrf::generate(),
+                    'users' => $users
+                ], 'admin');
+            }
+             try {
+                $image = $this->uploader->upload($_FILES['image']);
+            } catch (\Exception $e) {
+                $users = $this->userRepository->findAll();
+                return $this->render('admin/posts/create', [
+                    'error' => "Erreur d'upload : " . $e->getMessage(),
+                    'csrfToken' => Csrf::generate(),
+                    'users' => $users
+                ], 'admin');
+            }
+        }
+
         $this->postRepository->create([
             'title' => $title,
             'slug' => $this->slugify($title),
             'content' => $content,
+            'image' => $image,
             'published' => array_key_exists('published', $_POST),
             'createdAt' => date('Y-m-d H:i:s'),
             'user' => $user
@@ -161,6 +187,30 @@ class AdminPostController extends AbstractController
                 'error' => 'Le titre est obligatoire.',
                 'csrfToken' => Csrf::generate()
             ], 'admin');
+        }
+
+        if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
+             if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+                  $users = $this->userRepository->findAll();
+                  return $this->render('admin/posts/edit', [
+                        'post' => $post,
+                        'users' => $users,
+                        'error' => "Erreur lors du téléchargement de l'image.",
+                        'csrfToken' => Csrf::generate()
+                  ], 'admin');
+             }
+             try {
+                $image = $this->uploader->upload($_FILES['image']);
+                $post->setImage($image);
+            } catch (\Exception $e) {
+                $users = $this->userRepository->findAll();
+                return $this->render('admin/posts/edit', [
+                    'post' => $post,
+                    'users' => $users,
+                    'error' => "Erreur d'upload : " . $e->getMessage(),
+                    'csrfToken' => Csrf::generate()
+                ], 'admin');
+            }
         }
 
         $post->setTitle($title);

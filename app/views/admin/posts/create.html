@@ -4,12 +4,23 @@
 <div style="color: red"><?= $error ?></div>
 <?php endif; ?>
 
-<form action="/admin/posts/create" method="POST">
+<form action="/admin/posts/create" method="POST" enctype="multipart/form-data">
   <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
 
   <div>
     <label for="title">Titre:</label><br />
     <input type="text" id="title" name="title" required />
+  </div>
+  <br />
+
+  <div>
+    <label for="image">Image:</label><br />
+    <input
+      type="file"
+      id="image"
+      name="image"
+      accept="image/png, image/jpeg, image/webp"
+    />
   </div>
   <br />
 
