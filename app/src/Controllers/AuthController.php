@@ -91,7 +91,7 @@ class AuthController extends AbstractController
                 'email' => $user->getEmail(),
                 'role' => $user->getRole()
             ]);
-            return new Response('', 302, ['Location' => '/']);
+            return new Response('', 302, ['Location' => '/admin']);
         }
 
         return $this->render('auth/login', ['error' => 'Identifiants incorrects.', 'title' => 'Connexion']);
