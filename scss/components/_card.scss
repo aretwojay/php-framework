@@ -32,5 +32,8 @@
       line-height: f.rem(24);
       margin-block: 0;
     }
+    &--full {
+      width: 100%;
+    }
   }
 }

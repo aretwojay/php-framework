@@ -10,5 +10,11 @@
         max-width: calc($size - 4rem);
       }
     }
+
+    &--fluid {
+      max-width: 100% !important;
+      margin-inline: 0;
+      padding-inline: 2rem;
+    }
   }
 }

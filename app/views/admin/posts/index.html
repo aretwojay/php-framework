@@ -1,64 +1,85 @@
-<h1>Liste des articles</h1>
-<a href="/admin/posts/create" class="button">Créer un article</a>
+<div class="container--fluid">
+  <div class="d-flex justify-content-between align-items-center mb--4">
+    <h1 class="h2 m--0">Gestion des articles</h1>
+    <a href="/admin/posts/create" class="button button--primary"
+      >Créer un article</a
+    >
+  </div>
 
-<table class="admin-table">
-  <thead>
-    <tr class="admin-table__header">
-      <th class="admin-table__cell">ID</th>
-      <th class="admin-table__cell">Image</th>
-      <th class="admin-table__cell">Titre</th>
-      <th class="admin-table__cell">Contenu</th>
-      <th class="admin-table__cell">Auteur</th>
-      <th class="admin-table__cell">Date</th>
-      <th class="admin-table__cell">Statut</th>
-      <th class="admin-table__cell">Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <?php foreach ($posts as $post): ?>
-    <tr class="admin-table__row">
-      <td class="admin-table__cell"><?= htmlspecialchars($post->getId()) ?></td>
-      <td class="admin-table__cell">
-        <?php if ($post->getImage()): ?>
-        <img
-          src="<?= htmlspecialchars($post->getImage()) ?>"
-          alt="Post Image"
-          style="width: 50px; height: 50px; object-fit: cover"
-        />
-        <?php else: ?>
-        <span>-</span>
-        <?php endif; ?>
-      </td>
-      <td class="admin-table__cell">
-        <?= htmlspecialchars($post->getTitle()) ?>
-      </td>
-      <td class="admin-table__cell">
-        <?= htmlspecialchars($post->getContent()) ?>
-      </td>
-      <td class="admin-table__cell">
-        <?= $post->getUser() instanceof \App\Entities\User ?
-        htmlspecialchars($post->getUser()->getEmail()) :
-        htmlspecialchars($post->getUser()) ?>
-      </td>
-      <td class="admin-table__cell">
-        <?= htmlspecialchars($post->getCreatedAt()) ?>
-      </td>
-      <td class="admin-table__cell">
-        <?= $post->isPublished() ? 'Publié' : 'Brouillon' ?>
-      </td>
-      <td class="admin-table__cell admin-table__actions">
-        <a href="/admin/posts/<?= $post->getId() ?>/edit">Éditer</a>
-        <form
-          action="/admin/posts/<?= $post->getId() ?>/delete"
-          method="POST"
-          style="display: inline"
-          onsubmit="return confirm('Supprimer cet article ?');"
-        >
-          <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
-          <button type="submit">Supprimer</button>
-        </form>
-      </td>
-    </tr>
-    <?php endforeach; ?>
-  </tbody>
-</table>
+  <div class="card card--full p--0">
+    <table class="table m--0">
+      <thead>
+        <tr>
+          <th class="pl--4">ID</th>
+          <th>Image</th>
+          <th>Titre</th>
+          <th>Auteur</th>
+          <th>Date</th>
+          <th>Statut</th>
+          <th class="pr--4 text-right">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach ($posts as $post): ?>
+        <tr>
+          <td class="pl--4"><?= htmlspecialchars($post->getId()) ?></td>
+          <td>
+            <?php if ($post->getImage()): ?>
+            <img
+              src="<?= htmlspecialchars($post->getImage()) ?>"
+              alt="Post Image"
+              class="table__img"
+            />
+            <?php else: ?>
+            <span style="color: var(--grey)">-</span>
+            <?php endif; ?>
+          </td>
+          <td>
+            <strong><?= htmlspecialchars($post->getTitle()) ?></strong>
+          </td>
+          <td>
+            <?= $post->getUser() instanceof \App\Entities\User ?
+            htmlspecialchars($post->getUser()->getEmail()) :
+            htmlspecialchars($post->getUser()) ?>
+          </td>
+          <td><?= date('d/m/Y', strtotime($post->getCreatedAt())) ?></td>
+          <td>
+            <span
+              class="badge <?= $post->isPublished() ? 'badge--success' : 'badge--warning' ?>"
+            >
+              <?= $post->isPublished() ? 'Publié' : 'Brouillon' ?>
+            </span>
+          </td>
+          <td class="pr--4 text-right">
+            <div class="d-flex gap--2 justify-content-end">
+              <a
+                href="/admin/posts/<?= $post->getId() ?>/edit"
+                class="button button--secondary button--small"
+                >Éditer</a
+              >
+              <form
+                action="/admin/posts/<?= $post->getId() ?>/delete"
+                method="POST"
+                style="display: inline"
+                onsubmit="return confirm('Supprimer cet article ?');"
+              >
+                <input
+                  type="hidden"
+                  name="csrf_token"
+                  value="<?= $csrfToken ?>"
+                />
+                <button
+                  type="submit"
+                  class="button button--danger button--small"
+                >
+                  Supprimer
+                </button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <?php endforeach; ?>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,0 +1,16 @@
+@use "../partials/functions" as f;
+
+@layer components {
+  .footer {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: f.rem(32) 0;
+    margin-top: auto;
+    border-top: 1px solid var(--grey);
+    text-align: center;
+
+    &__text {
+      font-size: f.rem(14);
+    }
+  }
+}

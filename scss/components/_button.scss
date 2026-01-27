@@ -1,61 +1,77 @@
 @use "../partials/functions" as f;
+@use "sass:color";
+
 @layer components {
   .button {
     display: inline-block;
     padding: f.rem(10) f.rem(16);
     border-radius: f.rem(6);
     background-color: var(--black);
+    color: var(--white);
     font-size: 1rem;
     font-weight: 600;
     line-height: f.rem(18);
     text-decoration: none;
-    color: var(--white);
+    border: none;
     cursor: pointer;
     transition: background-color 0.3s;
+
     &:hover {
       background-color: var(--black-hover);
     }
-     &:focus {
-    outline: 2px solid var(--blue);
-    outline-offset: 2px;
+
+    &:focus {
+      outline: 2px solid var(--blue);
+      outline-offset: 2px;
     }
 
     &:disabled {
-    background-color: var(--grey);
-    color: var(--white);
-    cursor: not-allowed;
-    opacity: 0.6;
+      background-color: var(--grey);
+      color: var(--white);
+      cursor: not-allowed;
+      opacity: 0.6;
     }
 
-    // modifiers de couleur
+    // Colors
     &--primary {
+      color: var(--white);
       background-color: var(--blue);
       &:hover {
         background-color: var(--blue-hover);
       }
     }
+
     &--secondary {
       background-color: var(--grey);
+      color: var(--white);
       &:hover {
         background-color: var(--grey-hover);
       }
     }
+
     &--danger {
       background-color: var(--red);
+      color: var(--white);
       &:hover {
         background-color: var(--red-hover);
       }
     }
 
-    // modifiers de taille
-    &--lg {
-      padding: f.rem(16) f.rem(24);
+    // Sizes
+    &--small {
+      padding: f.rem(6) f.rem(10);
+      font-size: f.rem(12);
     }
 
-    &--sm {
-      font-size: f.rem(14);
-      line-height: f.rem(16);
-      padding: f.rem(8) f.rem(12);
+    &--large {
+      padding: f.rem(14) f.rem(24);
+      font-size: f.rem(18);
+    }
+
+    &--block {
+      display: block;
+      width: 100%;
+      text-align: center;
     }
   }
 }

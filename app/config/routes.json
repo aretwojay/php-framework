@@ -1,28 +1,13 @@
 [
   {
-    "path": "/artist",
+    "path": "/",
     "method": "GET",
-    "controller": "GetArtistsController"
+    "controller": "HomeController"
   },
   {
-    "path": "/artist/:id",
+    "path": "/design-guide",
     "method": "GET",
-    "controller": "GetArtistController"
-  },
-  {
-    "path": "/artist",
-    "method": "POST",
-    "controller": "PostArtistController"
-  },
-  {
-    "path": "/artist/:id",
-    "method": "PATCH",
-    "controller": "PatchArtistController"
-  },
-  {
-    "path": "/artist/:id",
-    "method": "DELETE",
-    "controller": "DeleteArtistController"
+    "controller": "HomeController"
   },
   {
     "path": "/login",
@@ -134,10 +119,5 @@
     "path": "/api/posts",
     "method": "GET",
     "controller": "PostController"
-  },
-  {
-    "path": "/",
-    "method": "GET",
-    "controller": "HomeController"
   }
 ]
