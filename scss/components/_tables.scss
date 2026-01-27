@@ -1,44 +1,106 @@
-.admin-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 2rem;
-  overflow-x: auto;
-  display: block;
-}
+@use "../partials/functions" as f;
+@use "../partials/variables" as v;
 
-.admin-table__header {
-  background-color: #1e1e2f;
-  color: #fff;
-  text-align: left;
-  font-weight: bold;
-}
+@layer components {
+  .table {
+    width: 100%;
+    caption-side: bottom;
+    border-collapse: collapse;
+    font-size: f.rem(14); // text-sm
+    
+    // Container for responsive scroll usually outside, but table itself:
+    &__container {
+        position: relative;
+        width: 100%;
+        overflow: auto;
+    }
 
-.admin-table__row {
-  &:nth-child(even) {
-    background-color: #f5f5f5;
+    th,
+    td {
+      padding: f.rem(16) f.rem(8); // p-4 align-middle (p-4 might be too much, p-2 or p-3?)
+      // Shadcn uses p-4 align-middle
+      text-align: left;
+      vertical-align: middle;
+      border-bottom: 1px solid var(--border);
+    }
+
+    th {
+      height: f.rem(48); // h-12
+      padding-left: f.rem(8); // px-4
+      padding-right: f.rem(8);
+      font-weight: 500; // font-medium
+      color: var(--muted-foreground);
+      background-color: transparent; // Clean look
+      
+      &:hover {
+          color: var(--foreground);
+      }
+    }
+    
+    tbody tr {
+        border-bottom: 1px solid var(--border);
+        transition: background-color 0.2s;
+        
+        &:hover {
+            background-color: var(--muted); // hover:bg-muted/50
+        }
+    }
+    
+    caption {
+        margin-top: f.rem(16);
+        font-size: f.rem(14);
+        color: var(--muted-foreground);
+    }
+    
+    // Image specific override
+    &__img {
+      width: f.rem(40);
+      height: f.rem(40);
+      object-fit: cover;
+      border-radius: f.rem(4);
+    }
+  }
+
+  // Legacy admin-table support, mapping to new vars
+  .admin-table {
+    // ... similar refactor if needed, or keep separate
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 2rem;
+    overflow-x: auto;
+    display: block; // Keep existing behavior if needed, or remove for full table
+    
+    &__header {
+        background-color: var(--secondary);
+        color: var(--secondary-foreground);
+        
+        th { 
+            padding: f.rem(12); 
+            text-align: left;
+            font-weight: 600;
+        }
+    }
+
+    &__row {
+        border-bottom: 1px solid var(--border);
+        
+        &:nth-child(even) {
+           // background-color: var(--muted); // cleaner without stripe usually in shadcn
+        }
+        &:hover {
+           background-color: var(--muted);
+        }
+    }
+    
+    &__cell {
+        padding: f.rem(12);
   }
 }
 
 .admin-table__cell {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  white-space: nowrap;
-}
-
-.admin-table__actions a {
-  margin-right: 0.5rem;
-  text-decoration: none;
-  color: #1890ff;
-}
-
-.admin-table__actions a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-  .admin-table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border); // Fix hardcoded #ddd
+    white-space: nowrap;
   }
-}
+} // Close layer components here
+

@@ -91,6 +91,7 @@ class PostController extends AbstractController
         ]]);
 
         return $this->render('post/index', [
+            'title'    => 'Mes Articles',
             'posts'     => $posts,
             'csrfToken' => Csrf::generate()
         ], "home");
@@ -99,6 +100,7 @@ class PostController extends AbstractController
     private function showCreateForm(): Response
     {
         return $this->render('post/create', [
+            'title'=> 'Créer un article',
             'error'     => null,
             'csrfToken' => Csrf::generate()
         ], "home");
@@ -176,6 +178,7 @@ class PostController extends AbstractController
         }
 
         return $this->render('post/edit', [
+            'title'     => "Éditer l'article",
             'post'      => $post,
             'error'     => null,
             'csrfToken' => Csrf::generate()
@@ -201,6 +204,7 @@ class PostController extends AbstractController
 
         if ($title === '') {
             return $this->render('post/edit', [
+                'title'     => "Éditer l'article",  
                 'post'      => $post,
                 'error'     => 'Le titre est obligatoire.',
                 'csrfToken' => Csrf::generate()
@@ -219,6 +223,7 @@ class PostController extends AbstractController
                     default => "Une erreur inconnue est survenue lors du téléchargement.",
                 };
                 return $this->render('post/edit', [
+                    'title'     => "Éditer l'article",
                     'post'      => $post,
                     'error'     => $errorMessage,
                     'csrfToken' => Csrf::generate()
@@ -231,6 +236,7 @@ class PostController extends AbstractController
                 $post->setImage($image);
             } catch (\Exception $e) {
                 return $this->render('post/edit', [
+                    'title'     => "Éditer l'article",
                     'post'      => $post,
                     'error'     => "Erreur d'upload : " . $e->getMessage(),
                     'csrfToken' => Csrf::generate()

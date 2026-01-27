@@ -1,36 +1,64 @@
 @use "../partials/functions" as f;
+@use "../partials/variables" as v;
+
 @layer components {
   .card {
+    border-radius: f.rem(6); // or var(--radius)
+    border: 1px solid var(--border);
+    background-color: var(--card);
+    color: var(--card-foreground);
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    
+    // Reset specific width for generic usage, let parent control sizing
+    width: 100%; 
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    gap: f.rem(10);
-    width: f.rem(320);
-    border-radius: f.rem(6);
-    background-color: var(--bg-color);
-    color: var(--text-color);
-    padding: f.rem(20);
-    border: solid thin var(--lightgrey);
-    overflow: hidden;
-    &__image {
-      margin-block: f.rem(-20) f.rem(10);
-      margin-inline: f.rem(-20);
-      max-width: unset;
-      width: inherit;
-      aspect-ratio: 320/200;
-      object-fit: cover;
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        padding: f.rem(24);
+        padding-bottom: 0;
+        gap: f.rem(6);
     }
+    
     &__title {
-      font-size: f.rem(20);
-      font-weight: 600;
-      line-height: f.rem(24);
-      margin-block: 0;
+        font-weight: 600;
+        font-size: f.rem(24);
+        line-height: f.rem(32);
+        letter-spacing: -0.025em; // tight tracking
+        margin: 0;
     }
-    &__text {
-      font-size: f.rem(16);
-      font-weight: 400;
-      line-height: f.rem(24);
-      margin-block: 0;
+    
+    &__description {
+        font-size: f.rem(14);
+        color: var(--muted-foreground);
+        margin: 0;
+    }
+
+    &__content,
+    > .table { // If table is direct child
+        padding: f.rem(24);
+        padding-top: f.rem(24); // could be 0 if header exists
+    }
+    
+    &__footer {
+        display: flex;
+        align-items: center;
+        padding: f.rem(24);
+        padding-top: 0;
+    }
+
+    // Legacy support for existing HTML structure if needed
+    // Assuming simple card usage: <div class="card">...</div>
+    padding: f.rem(24); 
+    
+    &__image {
+        // Adjust if needed
+        width: 100%;
+        border-top-left-radius: f.rem(6);
+        border-top-right-radius: f.rem(6);
+        object-fit: cover;
     }
   }
 }

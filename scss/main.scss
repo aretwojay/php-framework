@@ -1,14 +1,18 @@
 @use "partials/layers";
-@use "vendor/modern-normalize.css";
+@use "vendor/modern-normalize";
 @use "partials/globals";
 @use "partials/utilities";
 
 @use "components/container";
+@use "components/header";
+@use "components/navbar";
+@use "components/footer";
 @use "components/button";
 @use "components/card";
+@use "components/modal";
+@use "components/pagination";
+@use "components/forms";
 @use "components/admin";
 @use "components/tables";
 @use "components/typography";
-
-
-
+@use "components/badge";

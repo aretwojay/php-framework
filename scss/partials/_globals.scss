@@ -1,30 +1,91 @@
 @use "fonts" as f;
 @use "variables" as v;
 @use "sass:color";
+@use "sass:map";
+
 @layer base {
   :root {
     --spacing: #{v.$spacing};
+    --radius: #{v.$radius};
 
     @each $name, $value in v.$colors {
       --#{$name}: #{$value};
-      --#{$name}-hover: #{color.scale($value, $lightness: 20%)};
     }
 
-    // couleurs agnostiques
-    --bg-color: var(--white);
-    --text-color: var(--black-hover); // nom de variable bizarre... faisons avec
+    // Shadcn-like CSS Variables
+    --background: var(--white);
+    --foreground: var(--zinc-950);
+    
+    --card: var(--white);
+    --card-foreground: var(--zinc-950);
+    
+    --popover: var(--white);
+    --popover-foreground: var(--zinc-950);
+    
+    --primary: var(--zinc-900);
+    --primary-foreground: var(--zinc-50);
+    
+    --secondary: var(--zinc-100);
+    --secondary-foreground: var(--zinc-900);
+    
+    --muted: var(--zinc-100);
+    --muted-foreground: var(--zinc-500);
+    
+    --accent: var(--zinc-100);
+    --accent-foreground: var(--zinc-900);
+    
+    --destructive: var(--red-500);
+    --destructive-foreground: var(--zinc-50);
+
+    --border: var(--zinc-200);
+    --input: var(--zinc-200);
+    --ring: var(--zinc-950);
+    
+    --bg-color: var(--background);
+    --text-color: var(--foreground);
 
     @media (prefers-color-scheme: dark) {
-      --bg-color: var(--black-hover);
-      --text-color: var(--white);
+      --background: var(--zinc-950);
+      --foreground: var(--zinc-50);
+      
+      --card: var(--zinc-950);
+      --card-foreground: var(--zinc-50);
+      
+      --popover: var(--zinc-950);
+      --popover-foreground: var(--zinc-50);
+      
+      --primary: var(--zinc-50);
+      --primary-foreground: var(--zinc-900);
+      
+      --secondary: var(--zinc-800);
+      --secondary-foreground: var(--zinc-50);
+      
+      --muted: var(--zinc-800);
+      --muted-foreground: var(--zinc-400);
+      
+      --accent: var(--zinc-800);
+      --accent-foreground: var(--zinc-50);
+      
+      --destructive: var(--red-900);
+      --destructive-foreground: var(--zinc-50);
+      
+      --border: var(--zinc-800);
+      --input: var(--zinc-800);
+      --ring: var(--zinc-300);
+      
+      --bg-color: var(--background);
+      --text-color: var(--foreground);
     }
   }
 
   body {
     font-family: f.$mainFont;
-    background-color: var(--bg-color);
-    color: var(--text-color);
+    background-color: var(--background);
+    color: var(--foreground);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
 
   button {
     all: unset;
