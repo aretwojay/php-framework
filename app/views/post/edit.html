@@ -12,13 +12,24 @@
         <div style="color: red;"><?= $error ?></div>
     <?php endif; ?>
 
-    <form action="/posts/<?= $post->getId() ?>/edit" method="POST">
+    <form action="/posts/<?= $post->getId() ?>/edit" method="POST" enctype="multipart/form-data">
       <!-- CSRF Token -->
       <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
 
       <div>
         <label for="title">Title:</label><br />
         <input type="text" id="title" name="title" value="<?= htmlspecialchars($post->getTitle()) ?>" required />
+      </div>
+
+      <br />
+
+      <div>
+          <label for="image">Image:</label><br />
+          <?php if ($post->getImage()): ?>
+              <img src="<?= htmlspecialchars($post->getImage()) ?>" alt="Current Image" style="max-width: 200px; display: block; margin-bottom: 10px;">
+          <?php endif; ?>
+          <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/webp" />
+          <p><small>Leave blank to keep current image</small></p>
       </div>
 
       <br />

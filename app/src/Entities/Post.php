@@ -24,6 +24,9 @@ class Post extends AbstractEntity
     #[Column(type: 'varchar', size: 255, unique: true)]
     protected string $slug;
 
+    #[Column(type: 'longtext')]
+    protected string $image = '';
+
     #[Column(type: 'text')]
     protected string $content;
 
@@ -61,6 +64,17 @@ class Post extends AbstractEntity
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+        return $this;
+    }
+
+    public function getImage(): string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
         return $this;
     }
 
