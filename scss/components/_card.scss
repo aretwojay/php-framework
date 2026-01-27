@@ -8,57 +8,58 @@
     background-color: var(--card);
     color: var(--card-foreground);
     box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-    
+
     // Reset specific width for generic usage, let parent control sizing
-    width: 100%; 
+    width: 100%;
     display: flex;
     flex-direction: column;
 
     &__header {
-        display: flex;
-        flex-direction: column;
-        padding: f.rem(24);
-        padding-bottom: 0;
-        gap: f.rem(6);
+      display: flex;
+      flex-direction: column;
+      padding: f.rem(24);
+      padding-bottom: 0;
+      gap: f.rem(6);
     }
-    
+
     &__title {
-        font-weight: 600;
-        font-size: f.rem(24);
-        line-height: f.rem(32);
-        letter-spacing: -0.025em; // tight tracking
-        margin: 0;
+      font-weight: 600;
+      font-size: f.rem(24);
+      line-height: f.rem(32);
+      letter-spacing: -0.025em; // tight tracking
+      margin: 0;
     }
-    
+
     &__description {
-        font-size: f.rem(14);
-        color: var(--muted-foreground);
-        margin: 0;
+      font-size: f.rem(14);
+      color: var(--muted-foreground);
+      margin: 0;
     }
 
     &__content,
-    > .table { // If table is direct child
-        padding: f.rem(24);
-        padding-top: f.rem(24); // could be 0 if header exists
+    > .table {
+      // If table is direct child
+      padding: f.rem(24);
+      padding-top: f.rem(24); // could be 0 if header exists
     }
-    
+
     &__footer {
-        display: flex;
-        align-items: center;
-        padding: f.rem(24);
-        padding-top: 0;
+      display: flex;
+      align-items: center;
+      padding: f.rem(24);
+      padding-top: 0;
     }
 
     // Legacy support for existing HTML structure if needed
     // Assuming simple card usage: <div class="card">...</div>
-    padding: f.rem(24); 
-    
+    padding: f.rem(24);
+
     &__image {
-        // Adjust if needed
-        width: 100%;
-        border-top-left-radius: f.rem(6);
-        border-top-right-radius: f.rem(6);
-        object-fit: cover;
+      // Adjust if needed
+      width: 100%;
+      border-top-left-radius: f.rem(6);
+      border-top-right-radius: f.rem(6);
+      object-fit: cover;
     }
   }
 }

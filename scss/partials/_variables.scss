@@ -1,57 +1,21 @@
 $spacing: 0.25rem;
 
-$colors: (
-  // Primitives
-  "white": #ffffff,
-  "black": #09090b,
-  "zinc-50": #fafafa,
-  "zinc-100": #f4f4f5,
-  "zinc-200": #e4e4e7,
-  "zinc-300": #d4d4d8,
-  "zinc-400": #a1a1aa,
-  "zinc-500": #71717a,
-  "zinc-600": #52525b,
-  "zinc-700": #3f3f46,
-  "zinc-800": #27272a,
-  "zinc-900": #18181b,
-  "zinc-950": #09090b,
-  
-  "red-500": #ef4444,
-  "red-600": #dc2626,
-  
-  // Semantic Colors mapped later in global
-  "background": #ffffff,
-  "foreground": #09090b,
-  
-  "primary": #18181b,
-  "primary-foreground": #fafafa,
-  
-  "secondary": #f4f4f5,
-  "secondary-foreground": #18181b,
-  
-  "muted": #f4f4f5,
-  "muted-foreground": #71717a,
-  
-  "accent": #f4f4f5,
-  "accent-foreground": #18181b,
-  
-  "destructive": #ef4444,
-  "destructive-foreground": #fafafa,
-  
-  "border": #e4e4e7,
-  "input": #e4e4e7,
-  "ring": #18181b,
-  
-  // Legacy mappings for existing code
-  "red": #ef4444,
-  "blue": #3b82f6, // Updates blue to a nicer shade
-  "green": #22c55e,
-  "yellow": #eab308,
-  "grey": #71717a,
-  "lightgrey": #e4e4e7,
-);
+// Colors //
 
-$radius: 0.5rem;
+$colors: (
+  "red": #dc3545,
+  "blue": #0d6efd,
+  "green": #198754,
+  "yellow": #ffc107,
+  "grey": #6c757d,
+  "black": #000,
+  "white": #fff,
+  "lightgrey": #e5e5e5,
+  "primary": #0d6efd,
+  "secondary": #6c757d,
+  "bg-color": #f8f9fa,
+  "dark-bg-color": #212529,
+);
 
 // Breakpoints //
 

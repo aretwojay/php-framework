@@ -1,125 +1,77 @@
 @use "../partials/functions" as f;
-@use "../partials/variables" as v;
 @use "sass:color";
-@use "sass:map";
 
 @layer components {
   .button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    border-radius: f.rem(6); // or var(--radius) if mapped
-    font-size: f.rem(14);
-    font-weight: 500;
-    line-height: f.rem(20);
+    display: inline-block;
+    padding: f.rem(10) f.rem(16);
+    border-radius: f.rem(6);
+    background-color: var(--black);
+    color: var(--white);
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: f.rem(18);
     text-decoration: none;
-    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 0.15s;
-    
-    height: f.rem(40); // Standard h-10
-    padding: 0 f.rem(16); // px-4 py-2 equivalentish
-
-    border: 1px solid transparent; // Reset border
-    outline: none;
+    border: none;
     cursor: pointer;
-    
-    // Default variant (Primary equivalent)
-    background-color: var(--primary);
-    color: var(--primary-foreground);
-    
+    transition: background-color 0.3s;
+
     &:hover {
-      opacity: 0.9;
+      background-color: var(--black-hover);
     }
 
-    &:focus-visible {
-      outline: 2px solid var(--ring);
+    &:focus {
+      outline: 2px solid var(--blue);
       outline-offset: 2px;
     }
 
     &:disabled {
-      pointer-events: none;
-      opacity: 0.5;
+      background-color: var(--grey);
+      color: var(--white);
+      cursor: not-allowed;
+      opacity: 0.6;
     }
 
-    // Variants
+    // Colors
+    &--primary {
+      color: var(--white);
+      background-color: var(--blue);
+      &:hover {
+        background-color: var(--blue-hover);
+      }
+    }
+
     &--secondary {
-        background-color: var(--secondary);
-        color: var(--secondary-foreground);
-        &:hover {
-            background-color: var(--secondary);
-            opacity: 0.8;
-        }
-    }
-    
-    &--destructive {
-        background-color: var(--destructive);
-        color: var(--destructive-foreground);
-        &:hover {
-            opacity: 0.9;
-        }
-    }
-    
-    &--outline {
-        border: 1px solid var(--input);
-        background-color: var(--background);
-        color: var(--accent-foreground); 
-        &:hover {
-            background-color: var(--accent);
-            color: var(--accent-foreground);
-        }
+      background-color: var(--grey);
+      color: var(--white);
+      &:hover {
+        background-color: var(--grey-hover);
+      }
     }
 
-    &--ghost {
-        background-color: transparent;
-        color: var(--foreground);
-        &:hover {
-             background-color: var(--accent);
-             color: var(--accent-foreground);
-        }
-    }
-    
-    &--link {
-        background-color: transparent;
-        color: var(--primary);
-        text-decoration: underline;
-        text-underline-offset: 4px;
-        padding: 0;
-        height: auto;
-        
-        &:hover {
-            color: var(--primary); 
-        }
+    &--danger {
+      background-color: var(--red);
+      color: var(--white);
+      &:hover {
+        background-color: var(--red-hover);
+      }
     }
 
     // Sizes
     &--small {
-         height: f.rem(36); // h-9
-         padding: 0 f.rem(12); // px-3
-         font-size: f.rem(12);
+      padding: f.rem(6) f.rem(10);
+      font-size: f.rem(12);
     }
-    
+
     &--large {
-         height: f.rem(44); // h-11
-         padding: 0 f.rem(32); // px-8
-         font-size: f.rem(16);
+      padding: f.rem(14) f.rem(24);
+      font-size: f.rem(18);
     }
-    
-     &--icon {
-         height: f.rem(40);
-         width: f.rem(40);
-         padding: 0;
-     }
 
     &--block {
-        display: flex;
-        width: 100%;
-    }
-    
-    // Legacy support mappings
-    &--primary {
-         // Same as default
+      display: block;
+      width: 100%;
+      text-align: center;
     }
   }
 }

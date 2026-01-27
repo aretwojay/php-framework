@@ -1,59 +1,69 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Create New Post</title>
-  </head>
-  <body>
-    <h1>Create a New Post</h1>
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb--4">
+    <h1 class="h2 m--0">Créer un article</h1>
+    <a href="/posts" class="button button--secondary">Retour</a>
+  </div>
 
-    <form action="/posts/create" method="POST" enctype="multipart/form-data">
+  <div class="card p--4">
+    <form
+      action="/posts/create"
+      method="POST"
+      enctype="multipart/form-data"
+      class="form"
+    >
       <!-- CSRF Token -->
       <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+
       <?php if (isset($error)): ?>
-      <div style="color: red"><?= $error ?></div>
+      <div class="alert alert--danger mb--4"><?= $error ?></div>
       <?php endif; ?>
-      <div>
-        <label for="title">Title:</label><br />
-        <input type="text" id="title" name="title" required />
+
+      <div class="form__group">
+        <label for="title" class="form__label">Titre</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          class="form__input"
+          required
+        />
       </div>
 
-      <br />
-
-      <div>
-        <label for="image">Image:</label><br />
+      <div class="form__group">
+        <label for="image" class="form__label">Image</label>
         <input
           type="file"
           id="image"
           name="image"
+          class="form__input form__input--file"
           accept="image/png, image/jpeg, image/webp"
         />
+        <small style="color: var(--grey); font-size: 0.8em"
+          >PNG, JPG ou WEBP (Max 2MB)</small
+        >
       </div>
 
-      <br />
-
-      <div>
-        <label for="content">Content:</label><br />
+      <div class="form__group">
+        <label for="content" class="form__label">Contenu</label>
         <textarea
           id="content"
           name="content"
+          class="form__input"
           rows="10"
-          cols="50"
           required
         ></textarea>
       </div>
 
-      <br />
-
-      <div>
-        <label for="published">Published:</label>
+      <div class="form__group form__group--checkbox">
         <input type="checkbox" id="published" name="published" value="1" />
+        <label for="published">Publier cet article</label>
       </div>
 
-      <br />
-
-      <button type="submit">Publish Post</button>
+      <div class="mt--4">
+        <button type="submit" class="button button--primary">
+          Créer l'article
+        </button>
+      </div>
     </form>
-  </body>
-</html>
+  </div>
+</div>

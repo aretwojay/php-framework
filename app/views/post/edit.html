@@ -1,69 +1,80 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Edit Post</title>
-  </head>
-  <body>
-    <h1>Edit Post</h1>
+<div class="container">
+  <div class="d-flex justify-content-between align-items-center mb--4">
+    <h1 class="h2 m--0">Modifier l'article</h1>
+    <a href="/posts" class="button button--secondary">Retour</a>
+  </div>
 
-    <?php if (isset($error)): ?>
-        <div style="color: red;"><?= $error ?></div>
-    <?php endif; ?>
-
-    <form action="/posts/<?= $post->getId() ?>/edit" method="POST" enctype="multipart/form-data">
+  <div class="card p--4">
+    <form action="/posts/<?= $post->getId() ?>/edit" method="POST" enctype="multipart/form-data" class="form">
       <!-- CSRF Token -->
       <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
 
-      <div>
-        <label for="title">Title:</label><br />
-        <input type="text" id="title" name="title" value="<?= htmlspecialchars($post->getTitle()) ?>" required />
+      <?php if (isset($error)): ?>
+        <div class="alert alert--danger mb--4"><?= $error ?></div>
+      <?php endif; ?>
+
+      <div class="form__group">
+        <label for="title" class="form__label">Titre</label>
+        <input 
+          type="text" 
+          id="title" 
+          name="title" 
+          class="form__input" 
+          value="<?= htmlspecialchars($post->getTitle()) ?>" 
+          required 
+        />
       </div>
 
-      <br />
-
-      <div>
-          <label for="image">Image:</label><br />
-          <?php if ($post->getImage()): ?>
-              <img src="<?= htmlspecialchars($post->getImage()) ?>" alt="Current Image" style="max-width: 200px; display: block; margin-bottom: 10px;">
-          <?php endif; ?>
-          <input type="file" id="image" name="image" accept="image/png, image/jpeg, image/webp" />
-          <p><small>Leave blank to keep current image</small></p>
+      <div class="form__group">
+        <label for="image" class="form__label">Image</label>
+        <?php if ($post->getImage()): ?>
+          <div class="mb--2">
+             <img src="<?= htmlspecialchars($post->getImage()) ?>" alt="Current Image" style="max-width: 200px; border-radius: 6px;">
+          </div>
+        <?php endif; ?>
+        <input 
+          type="file" 
+          id="image" 
+          name="image" 
+          class="form__input form__input--file" 
+          accept="image/png, image/jpeg, image/webp" 
+        />
+        <small style="color: var(--grey); font-size: 0.8em; display: block; margin-top: 4px;">Laisser vide pour conserver l'image actuelle</small>
       </div>
 
-      <br />
-
-      <div>
-        <label for="content">Content:</label><br />
+      <div class="form__group">
+        <label for="content" class="form__label">Contenu</label>
         <textarea
           id="content"
           name="content"
+          class="form__input form__textarea"
           rows="10"
-          cols="50"
           required
         ><?= htmlspecialchars($post->getContent()) ?></textarea>
       </div>
 
-      <br />
-
-      <div>
-        <label for="published">Published:</label>
+      <div class="form__group form__group--checkbox">
         <input type="checkbox" id="published" name="published" value="1" <?= $post->isPublished() ? 'checked' : '' ?> />
+        <label for="published">Publier cet article</label>
       </div>
 
-      <br />
-
-      <button type="submit">Update Post</button>
+      <div class="d-flex justify-content-between align-items-center mt--4">
+         <button type="submit" class="button button--primary">Mettre à jour</button>
+         
+         <button 
+            type="submit" 
+            form="delete-form" 
+            class="button button--danger"
+            onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet article ?');"
+         >
+            Supprimer
+         </button>
+      </div>
     </form>
     
-    <p>
-        <form action="/posts/<?= $post->getId() ?>/delete" method="POST" onsubmit="return confirm('Are you sure?');">
-            <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
-            <button type="submit" style="color: red;">Delete Post</button>
-        </form>
-    </p>
-
-    <a href="/posts">Back to List</a>
-  </body>
-</html>
+    <!-- Hidden form for deletion -->
+    <form id="delete-form" action="/posts/<?= $post->getId() ?>/delete" method="POST" style="display: none;">
+        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+    </form>
+  </div>
+</div>
