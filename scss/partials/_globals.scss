@@ -13,10 +13,12 @@
     // couleurs agnostiques
     --bg-color: var(--bg-color);
     --text-color: var(--black-hover); // nom de variable bizarre... faisons avec
+    --border-color: var(--lightgrey);
 
     @media (prefers-color-scheme: dark) {
       --bg-color: var(--dark-bg-color);
       --text-color: var(--white);
+      --border-color: #495057; // grey-ish for dark mode
     }
   }
 

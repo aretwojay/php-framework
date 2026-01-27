@@ -2,14 +2,14 @@
 
 @layer components {
   .footer {
-    background-color: var(--lightgrey);
+    background-color: var(--bg-color);
+    color: var(--text-color);
     padding: f.rem(32) 0;
     margin-top: auto;
     border-top: 1px solid var(--grey);
     text-align: center;
 
     &__text {
-      color: var(--grey); // Using grey directly for footer text
       font-size: f.rem(14);
     }
   }

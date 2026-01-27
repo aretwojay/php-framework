@@ -1,25 +1,39 @@
 @use "../partials/functions" as f;
+@use "../partials/variables" as v;
 
 @layer components {
   .table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: f.rem(16);
+    font-size: f.rem(14);
 
-    th,
-    td {
-      padding: f.rem(12);
-      border-bottom: 1px solid var(--grey);
-      text-align: left;
+    thead {
+      background-color: var(--bg-color);
+      border-bottom: 1px solid var(--border-color);
     }
 
     th {
-      font-weight: 600;
-      background-color: var(--lightgrey);
-      color: var(--black);
+      font-weight: 500;
+      color: var(--text-color);
+      text-transform: uppercase;
+      font-size: f.rem(12);
+      letter-spacing: 0.05em;
+      padding: f.rem(16) f.rem(12);
+      text-align: left;
     }
 
-    tr:hover {
+    td {
+      padding: f.rem(12);
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-color);
+      vertical-align: middle;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    tr:hover td {
       background-color: rgba(0, 0, 0, 0.02);
     }
 
@@ -28,63 +42,43 @@
       height: f.rem(40);
       object-fit: cover;
       border-radius: f.rem(4);
+      display: block;
+    }
+
+    // Responsive wrapper if needed
+    &-responsive {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
     }
   }
 
+  // Admin Table styles - inheriting or extending if needed
   .admin-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 2rem;
-    overflow-x: auto;
-    display: block; // Keep existing behavior if needed, or remove for full table
+    @extend .table;
 
+    // Admin specific overrides could go here
     &__header {
-      background-color: var(--black);
-      color: var(--white);
-
-      th {
-        padding: f.rem(12);
-        text-align: left;
-      }
+      @extend thead;
     }
 
     &__row {
-      &:nth-child(even) {
-        background-color: var(--lightgrey);
-      }
-      &:hover {
-        background-color: var(--grey); // slightly darker
-        color: var(--white);
-      }
+      // Just target tr inside tbody of .admin-table usually,
+      // but if using specific classes:
     }
 
     &__cell {
-      padding: f.rem(12);
-      border-bottom: 1px solid var(--grey);
+      @extend td;
     }
-  }
-}
 
-.admin-table__cell {
-  padding: 0.75rem 1rem;
-  border: 1px solid #ddd;
-  white-space: nowrap;
-}
-
-.admin-table__actions a {
-  margin-right: 0.5rem;
-  text-decoration: none;
-  color: #1890ff;
-}
-
-.admin-table__actions a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 768px) {
-  .admin-table {
-    display: block;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
+    &__actions {
+      a {
+        color: var(--blue);
+        text-decoration: none;
+        margin-right: f.rem(8);
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 }

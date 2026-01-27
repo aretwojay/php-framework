@@ -19,6 +19,18 @@
     .p--#{$i} {
       padding: calc($i * var(--spacing));
     }
+    .pt--#{$i} {
+      padding-top: calc($i * var(--spacing));
+    }
+    .pb--#{$i} {
+      padding-bottom: calc($i * var(--spacing));
+    }
+    .pl--#{$i} {
+      padding-inline-start: calc($i * var(--spacing));
+    }
+    .pr--#{$i} {
+      padding-inline-end: calc($i * var(--spacing));
+    }
 
     .gap--#{$i} {
       gap: calc($i * var(--spacing));
@@ -33,6 +45,9 @@
   }
   .justify-content-center {
     justify-content: center;
+  }
+  .justify-content-end {
+    justify-content: flex-end;
   }
   .align-items-center {
     align-items: center;

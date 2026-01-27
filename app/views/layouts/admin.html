@@ -5,34 +5,53 @@
     <title><?= $title ?? 'Admin Dashboard' ?></title>
     <link rel="stylesheet" href="/public/css/main.css" />
   </head>
-  <body class="admin-layout">
-    <div class="admin-container">
+  <body>
+    <div class="admin-layout">
       <!-- Sidebar -->
       <aside class="sidebar">
-        <h2>CMS Admin</h2>
-        <nav>
-          <ul>
-            <li><a href="/admin">Dashboard</a></li>
-            <li><a href="/admin/posts">Articles</a></li>
+        <div class="sidebar__header">
+          <h2 class="sidebar__title">CMS Admin</h2>
+        </div>
+        <nav class="sidebar__nav">
+          <ul class="sidebar__list">
+            <li class="sidebar__item">
+              <a
+                href="/admin"
+                class="sidebar__link <?= ($_SERVER['REQUEST_URI'] === '/admin') ? 'sidebar__link--active' : '' ?>"
+              >
+                Dashboard
+              </a>
+            </li>
+            <li class="sidebar__item">
+              <a
+                href="/admin/posts"
+                class="sidebar__link <?= (strpos($_SERVER['REQUEST_URI'], '/admin/posts') === 0) ? 'sidebar__link--active' : '' ?>"
+              >
+                Articles
+              </a>
+            </li>
           </ul>
         </nav>
       </aside>
 
       <!-- Main content -->
-      <div class="main">
+      <div class="admin-layout__main">
         <!-- Topbar -->
         <header class="topbar">
-          <div>
-            👤 <?= htmlspecialchars(\App\Core\Session::get('user')['email'] ??
+          <div class="topbar__user">
+            <span class="topbar__avatar">👤</span>
+            <?= htmlspecialchars(\App\Core\Session::get('user')['email'] ??
             'Admin') ?>
           </div>
           <form method="POST" action="/logout">
-            <button type="submit">Déconnexion</button>
+            <button type="submit" class="button button--primary button--small">
+              Déconnexion
+            </button>
           </form>
         </header>
 
         <!-- Page content -->
-        <section class="content"><?= $content ?></section>
+        <section class="admin-layout__content"><?= $content ?></section>
       </div>
     </div>
   </body>

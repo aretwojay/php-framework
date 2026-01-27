@@ -4,7 +4,7 @@
     <a href="/posts" class="button button--secondary">Retour</a>
   </div>
 
-  <div class="card p--4">
+  <div class="card card--full p--4">
     <form action="/posts/<?= $post->getId() ?>/edit" method="POST" enctype="multipart/form-data" class="form">
       <!-- CSRF Token -->
       <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
