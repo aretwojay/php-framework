@@ -1,7 +1,7 @@
 {
-  "host": "db",
+  "host": "cms_db",
   "user": "root",
-  "password": "password",
-  "database": "db",
+  "password": "root",
+  "database": "cms_db",
   "port": 3306
 }

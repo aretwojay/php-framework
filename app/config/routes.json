@@ -44,6 +44,13 @@
     "middleware": "AdminMiddleware"
   },
   {
+    "method": "POST",
+    "path": "/admin/clear-cache",
+    "controller": "DashboardController",
+    "action": "clearCache",
+    "middleware": "AdminMiddleware"
+  },
+  {
     "method": "GET",
     "path": "/admin/posts",
     "controller": "AdminPostController",
