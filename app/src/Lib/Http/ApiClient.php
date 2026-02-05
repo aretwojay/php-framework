@@ -123,7 +123,7 @@ class ApiClient
     private function prepareHeaders(): array
     {
         $headers = [];
-        
+
         foreach ($this->defaultHeaders as $key => $value) {
             $headers[] = "$key: $value";
         }

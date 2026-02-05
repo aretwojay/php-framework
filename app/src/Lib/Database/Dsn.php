@@ -2,9 +2,10 @@
 
 namespace App\Lib\Database;
 
-class Dsn {
+class Dsn
+{
     const DATABASE_CONFIG_PATH = __DIR__ . '/../../../config/database.json';
-    
+
     private string $host;
     private string $user;
     private string $password;
@@ -12,7 +13,8 @@ class Dsn {
     private int $port;
     private string $dsn;
 
-    public function __construct() {
+    public function __construct()
+    {
         $config = self::getConfig();
 
         $this->host = $config['host'];
@@ -23,40 +25,47 @@ class Dsn {
         $this->dsn = 'mysql:';
     }
 
-    public function getUser(): string {
+    public function getUser(): string
+    {
         return $this->user;
     }
 
-    public function getPassword(): string {
+    public function getPassword(): string
+    {
         return $this->password;
     }
 
-    public function addHostToDsn(): self {
+    public function addHostToDsn(): self
+    {
         $this->dsn .= "host=$this->host;";
         return $this;
     }
 
-    public function addDbnameToDsn(): self {
+    public function addDbnameToDsn(): self
+    {
         $this->dsn .= "dbname=$this->dbname;";
         return $this;
     }
 
-    public function addPortToDsn(): self {
+    public function addPortToDsn(): self
+    {
         $this->dsn .= "port=$this->port;";
         return $this;
     }
 
-    public function getDsn(): string {
+    public function getDsn(): string
+    {
         return $this->dsn;
     }
 
-    public function getDbName(): string {
+    public function getDbName(): string
+    {
         return $this->dbname;
     }
 
-    private static function getConfig(): array {
+    private static function getConfig(): array
+    {
         $file = file_get_contents(self::DATABASE_CONFIG_PATH);
         return json_decode($file, true);
     }
-    
 }

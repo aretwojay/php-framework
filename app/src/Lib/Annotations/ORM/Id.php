@@ -1,12 +1,11 @@
 <?php
 
-
 namespace App\Lib\Annotations\ORM;
 
 use App\Lib\Annotations\AbstractAnnotation;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
-class Id extends AbstractAnnotation{}
-
-?>
+class Id extends AbstractAnnotation
+{
+}

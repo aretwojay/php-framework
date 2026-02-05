@@ -2,11 +2,12 @@
 
 namespace App\Lib\Entities;
 
-abstract class AbstractEntity {
-
+abstract class AbstractEntity
+{
     abstract public function getId(): int | string;
 
-    public function __set($name, $value) {
+    public function __set($name, $value)
+    {
         // 1. Direct Setter: set{Property}
         $setter = 'set' . ucfirst($name);
         if (method_exists($this, $setter)) {
@@ -29,15 +30,16 @@ abstract class AbstractEntity {
         }
 
         // 4. Dynamic Property
-        $this->$name = $value; 
+        $this->$name = $value;
     }
 
-    private function hydrateRelation(string $name, mixed $value): bool {
+    private function hydrateRelation(string $name, mixed $value): bool
+    {
         $reflection = new \ReflectionClass($this);
 
         foreach ($reflection->getProperties() as $property) {
             $propName = $property->getName();
-            
+
             // Check matching prefix: e.g. user_id -> user property
             if (!str_starts_with($name, $propName . '_')) {
                 continue;
@@ -74,7 +76,8 @@ abstract class AbstractEntity {
         return false;
     }
 
-    private function getPropertyClass(\ReflectionProperty $property): ?string {
+    private function getPropertyClass(\ReflectionProperty $property): ?string
+    {
         $type = $property->getType();
         if ($type instanceof \ReflectionNamedType && !$type->isBuiltin()) {
             return $type->getName();
@@ -89,7 +92,8 @@ abstract class AbstractEntity {
         return null;
     }
 
-    private function getRelationInstance(\ReflectionProperty $property, string $targetClass): object {
+    private function getRelationInstance(\ReflectionProperty $property, string $targetClass): object
+    {
         $property->setAccessible(true);
         $currentVal = $property->isInitialized($this) ? $property->getValue($this) : null;
 
@@ -98,21 +102,22 @@ abstract class AbstractEntity {
         }
 
         $relationObj = new $targetClass();
-        
+
         // Preserve legacy scalar value (ID) if present
         if (!is_null($currentVal) && is_scalar($currentVal)) {
             if (method_exists($relationObj, 'setId')) {
                 $relationObj->setId($currentVal);
             } else {
                 // Triggers __set on the relation object
-                $relationObj->id = $currentVal; 
+                $relationObj->id = $currentVal;
             }
         }
 
         return $relationObj;
     }
-    
-    public function toArray(): array {
+
+    public function toArray(): array
+    {
         $reflection = new \ReflectionClass($this);
         $properties = $reflection->getProperties();
         $array = [];
@@ -132,5 +137,3 @@ abstract class AbstractEntity {
         return $array;
     }
 }
-
-?>

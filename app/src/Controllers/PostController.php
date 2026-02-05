@@ -11,6 +11,9 @@ use App\Repositories\PostRepository;
 use App\Repositories\UserRepository;
 use App\Services\Uploader;
 
+use function App\Lib\Security\sanitize_text_field;
+use function App\Lib\Security\sanitize_post_data;
+
 class PostController extends AbstractController
 {
     private PostRepository $postRepository;
@@ -100,7 +103,7 @@ class PostController extends AbstractController
     private function showCreateForm(): Response
     {
         return $this->render('post/create', [
-            'title'=> 'Créer un article',
+            'title' => 'Créer un article',
             'error'     => null,
             'csrfToken' => Csrf::generate()
         ], "home");
@@ -114,8 +117,9 @@ class PostController extends AbstractController
             return new Response('Invalid CSRF token', 403);
         }
 
-        $title   = trim($_POST['title'] ?? '');
-        $content = $_POST['content'] ?? '';
+        $post_data = sanitize_post_data();
+        $title   = trim($post_data['title'] ?? '');
+        $content = $post_data['content'] ?? '';
 
         if ($title === '') {
             return $this->render('post/create', [
@@ -128,17 +132,17 @@ class PostController extends AbstractController
         $user = $userSession ? $this->userRepository->find($userSession['id']) : null;
 
         $image = null;
-        
+
         // Check standard upload errors first
         if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_OK && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
-            $errorMessage = match($_FILES['image']['error']) {
+            $errorMessage = match ($_FILES['image']['error']) {
                 UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => "Le fichier est trop volumineux (max " . ini_get('upload_max_filesize') . ").",
                 UPLOAD_ERR_PARTIAL => "Le fichier n'a été que partiellement téléchargé.",
                 UPLOAD_ERR_NO_TMP_DIR => "Le dossier temporaire est manquant.",
                 UPLOAD_ERR_CANT_WRITE => "Échec de l'écriture du fichier sur le disque.",
                 default => "Une erreur inconnue est survenue lors du téléchargement.",
             };
-            
+
             return $this->render('post/create', [
                 'error'     => $errorMessage,
                 'csrfToken' => Csrf::generate()
@@ -199,12 +203,13 @@ class PostController extends AbstractController
             return new Response(PostRepository::POST_NOT_FOUND, 404);
         }
 
-        $title   = trim($_POST['title'] ?? '');
-        $content = $_POST['content'] ?? '';
+        $post_data = sanitize_post_data();
+        $title   = trim($post_data['title'] ?? '');
+        $content = $post_data['content'] ?? '';
 
         if ($title === '') {
             return $this->render('post/edit', [
-                'title'     => "Éditer l'article",  
+                'title'     => "Éditer l'article",
                 'post'      => $post,
                 'error'     => 'Le titre est obligatoire.',
                 'csrfToken' => Csrf::generate()
@@ -215,13 +220,13 @@ class PostController extends AbstractController
         if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
             // Check for upload errors
             if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-                 $errorMessage = match($_FILES['image']['error']) {
+                 $errorMessage = match ($_FILES['image']['error']) {
                     UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE => "Le fichier est trop volumineux (max " . ini_get('upload_max_filesize') . ").",
                     UPLOAD_ERR_PARTIAL => "Le fichier n'a été que partiellement téléchargé.",
                     UPLOAD_ERR_NO_TMP_DIR => "Le dossier temporaire est manquant.",
                     UPLOAD_ERR_CANT_WRITE => "Échec de l'écriture du fichier sur le disque.",
                     default => "Une erreur inconnue est survenue lors du téléchargement.",
-                };
+                 };
                 return $this->render('post/edit', [
                     'title'     => "Éditer l'article",
                     'post'      => $post,

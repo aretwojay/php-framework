@@ -46,9 +46,8 @@ class Uploader
 
         // Convert to Base64
         $base64 = base64_encode($content);
-        
+
         // Return Data URI
         return 'data:' . $mimeType . ';base64,' . $base64;
     }
 }
-

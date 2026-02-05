@@ -20,9 +20,9 @@ class DashboardController extends AbstractController
         $user = Session::get("user");
 
         return $this->render(
-            'admin/dashboard',               
+            'admin/dashboard',
             ['title' => 'Dashboard Admin', 'user' => $user],
-            'admin'                  
+            'admin'
         );
     }
 
@@ -34,7 +34,7 @@ class DashboardController extends AbstractController
         $response = new Response();
         $response->setStatus(302);
         $response->addHeader('Location', '/admin');
-        
+
         return $response;
     }
 }

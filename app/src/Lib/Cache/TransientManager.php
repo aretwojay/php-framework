@@ -13,11 +13,11 @@ class TransientManager
             $storagePath = __DIR__ . '/../../../log/transients';
         }
         self::$storagePath = $storagePath;
-        
+
         if (!is_dir($storagePath)) {
             mkdir($storagePath, 0755, true);
         }
-        
+
         self::loadTransients();
     }
 

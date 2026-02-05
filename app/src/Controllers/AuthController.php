@@ -9,6 +9,8 @@ use App\Lib\Http\Request;
 use App\Lib\Http\Response;
 use App\Repositories\UserRepository;
 
+use function App\Lib\Security\sanitize_text_field;
+
 class AuthController extends AbstractController
 {
     private UserRepository $userRepository;
@@ -46,9 +48,10 @@ class AuthController extends AbstractController
 
     private function registerProcess(): Response
     {
-        $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
-        $password = $_POST['password'] ?? '';
-        
+        $email = sanitize_text_field($_POST['email'] ?? '');
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : '';
+        $password = sanitize_text_field($_POST['password'] ?? '');
+
         $errors = [];
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -80,11 +83,12 @@ class AuthController extends AbstractController
 
     private function loginProcess(): Response
     {
-        $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
-        $password = $_POST['password'] ?? '';
+        $email = sanitize_text_field($_POST['email'] ?? '');
+        $email = filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : '';
+        $password = sanitize_text_field($_POST['password'] ?? '');
 
         $user = $this->userRepository->findByEmail($email);
-        
+
         if ($user && password_verify($password, $user->getPassword())) {
             Session::set('user', [
                 'id' => $user->getId(),

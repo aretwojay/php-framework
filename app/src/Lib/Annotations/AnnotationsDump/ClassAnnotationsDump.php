@@ -4,7 +4,8 @@ namespace App\Lib\Annotations\AnnotationsDump;
 
 use App\Lib\Annotations\AbstractAnnotation;
 
-class ClassAnnotationsDump {
+class ClassAnnotationsDump
+{
     public string $name;
     private array $annotations;
     private array $properties;
@@ -16,53 +17,62 @@ class ClassAnnotationsDump {
         $this->properties = [];
     }
 
-    public function getName(): string {
+    public function getName(): string
+    {
         return $this->name;
     }
 
-    public function addAnnotation(string $annotationName, AbstractAnnotation $annotation): void {
+    public function addAnnotation(string $annotationName, AbstractAnnotation $annotation): void
+    {
         $this->annotations[$annotationName] = $annotation;
     }
 
-    public function getAnnotations(): array {
+    public function getAnnotations(): array
+    {
         return $this->annotations;
     }
 
-    public function hasAnnotation(string $annotation): bool {
+    public function hasAnnotation(string $annotation): bool
+    {
         return array_key_exists($annotation, $this->getAnnotations());
     }
 
-    public function getAnnotation(string $annotation): AbstractAnnotation {
-        if($this->hasAnnotation($annotation) === false) {
+    public function getAnnotation(string $annotation): AbstractAnnotation
+    {
+        if ($this->hasAnnotation($annotation) === false) {
             throw new \Exception('annotation not found in class');
         }
 
         return $this->getAnnotations()[$annotation];
     }
-    
-    public function addProperty(PropertyAnnotationsDump $property): void {
+
+    public function addProperty(PropertyAnnotationsDump $property): void
+    {
         $this->properties[] = $property;
     }
 
-    public function getProperties(): array {
+    public function getProperties(): array
+    {
         return $this->properties;
     }
 
-    public function propertiesHaveAnnotation(string $annotation): bool {
-        foreach($this->getProperties() as $property) {
-            if($property->hasAnnotation($annotation) === true) {
+    public function propertiesHaveAnnotation(string $annotation): bool
+    {
+        foreach ($this->getProperties() as $property) {
+            if ($property->hasAnnotation($annotation) === true) {
                 return true;
             }
         }
-        
+
         return false;
     }
 
-    public function getPropertiesWithAnnotation(string $annotation): array {
+    public function getPropertiesWithAnnotation(string $annotation): array
+    {
         $properties = [];
 
-        foreach($this->getProperties() as $property) {
-            if($property->hasAnnotation($annotation) === true) {
+        foreach ($this->getProperties() as $property) {
+            if ($property->hasAnnotation($annotation) === true) {
                 $properties[] = $property;
             }
         }
@@ -70,5 +80,3 @@ class ClassAnnotationsDump {
         return $properties;
     }
 }
-
-?>

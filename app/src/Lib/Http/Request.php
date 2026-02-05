@@ -2,7 +2,8 @@
 
 namespace App\Lib\Http;
 
-class Request {
+class Request
+{
     private string $uri;
     private string $path;
     private string $method;
@@ -11,7 +12,8 @@ class Request {
     private array $urlParams;
     private string $payload;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->uri = $_SERVER['REQUEST_URI'];
         $this->path = parse_url($this->uri, PHP_URL_PATH);
         $this->method = $_SERVER['REQUEST_METHOD'];
@@ -20,45 +22,54 @@ class Request {
         $this->payload = file_get_contents('php://input');
     }
 
-    public function getUri(): string {
+    public function getUri(): string
+    {
         return $this->uri;
     }
 
-    public function getPath(): string {
+    public function getPath(): string
+    {
         return $this->path;
     }
 
-    public function getMethod(): string {
+    public function getMethod(): string
+    {
         return $this->method;
     }
 
-    public function addSlug(string $key, string $value): self {
+    public function addSlug(string $key, string $value): self
+    {
         $this->slugs[$key] = $value;
-        
+
         return $this;
     }
 
-    public function getSlugs(): array {
+    public function getSlugs(): array
+    {
         return $this->slugs;
     }
 
-    public function getSlug(string $key): string {
-        if(!isset($this->slugs[$key])) {
+    public function getSlug(string $key): string
+    {
+        if (!isset($this->slugs[$key])) {
             return '';
         }
-        
+
         return $this->slugs[$key];
     }
 
-    public function getUrlParams(): array {
+    public function getUrlParams(): array
+    {
         return $this->urlParams;
     }
-    
-    public function getHeaders(): array {
+
+    public function getHeaders(): array
+    {
         return $this->headers;
     }
 
-    public function getPayload(): string {
+    public function getPayload(): string
+    {
         return $this->payload;
     }
 }
