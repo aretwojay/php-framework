@@ -21,6 +21,11 @@
     "controller": "AuthController"
   },
   {
+    "path": "/api/login",
+    "method": "POST",
+    "controller": "AuthController"
+  },
+  {
     "path": "/register",
     "method": "GET",
     "controller": "AuthController",
@@ -116,8 +121,18 @@
     "middleware": "AuthMiddleware"
   },
   {
-    "path": "/api/posts",
+    "path": "/api/content",
     "method": "GET",
+    "controller": "PostController"
+  },
+  {
+    "path": "/api/content/:id",
+    "method": "GET",
+    "controller": "PostController"
+  },
+  {
+    "path": "/api/content/:id",
+    "method": "POST",
     "controller": "PostController"
   }
 ]

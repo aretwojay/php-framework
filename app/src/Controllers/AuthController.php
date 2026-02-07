@@ -37,6 +37,12 @@ class AuthController extends AbstractController
             return $this->render('auth/login', ['title' => 'Connexion']);
         }
 
+        if ($path === '/api/login') {
+            if ($method === 'POST') {
+                return $this->apiLoginProcess();
+            }
+        }
+
         if ($path === '/logout') {
             return $this->logout();
         }
@@ -95,6 +101,29 @@ class AuthController extends AbstractController
         }
 
         return $this->render('auth/login', ['error' => 'Identifiants incorrects.', 'title' => 'Connexion']);
+    }
+
+    private function apiLoginProcess(): Response
+    {
+        $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
+        $password = $_POST['password'] ?? '';
+
+        $user = $this->userRepository->findByEmail($email);
+        if ($user && password_verify($password, $user->getPassword())) {
+            $secret = "my_secret_key"; // In a real application, use a secure key from config
+            $token = password_hash($user->getEmail() . $secret, PASSWORD_ARGON2ID);
+            // In a real application, you would generate a JWT or similar token here
+            return new Response(json_encode([
+                'status' => 'success',
+                'message' => 'Login successful',
+                'token' => $token
+            ]), 200, ['Content-Type' => 'application/json']);
+        }
+
+        return new Response(json_encode([
+            'status' => 'error',
+            'message' => 'Invalid credentials d' . print_r($_POST, true) . print_r($user, true)
+        ]), 401, ['Content-Type' => 'application/json']);
     }
 
     private function logout(): Response
