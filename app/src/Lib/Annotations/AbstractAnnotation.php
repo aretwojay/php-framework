@@ -2,6 +2,6 @@
 
 namespace App\Lib\Annotations;
 
-abstract class AbstractAnnotation{}
-
-?>
+abstract class AbstractAnnotation
+{
+}

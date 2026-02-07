@@ -9,8 +9,10 @@ use App\Lib\Http\Response;
 use App\Repositories\PostRepository;
 use App\Repositories\UserRepository;
 use App\Services\Uploader;
-
 use App\Lib\Security\Csrf;
+
+use function App\Lib\Security\sanitize_text_field;
+use function App\Lib\Security\sanitize_post_data;
 
 class AdminPostController extends AbstractController
 {
@@ -35,14 +37,22 @@ class AdminPostController extends AbstractController
         }
 
         if ($path === '/admin/posts/create') {
-            if ($method === 'GET') return $this->showCreateForm();
-            if ($method === 'POST') return $this->handleCreate();
+            if ($method === 'GET') {
+                return $this->showCreateForm();
+            }
+            if ($method === 'POST') {
+                return $this->handleCreate();
+            }
         }
 
         if (preg_match('#^/admin/posts/(\d+)/edit$#', $path, $matches)) {
             $id = (int)$matches[1];
-            if ($method === 'GET') return $this->showEditForm($id);
-            if ($method === 'POST') return $this->handleUpdate($id);
+            if ($method === 'GET') {
+                return $this->showEditForm($id);
+            }
+            if ($method === 'POST') {
+                return $this->handleUpdate($id);
+            }
         }
 
         if (preg_match('#^/admin/posts/(\d+)/delete$#', $path, $matches) && $method === 'POST') {
@@ -58,7 +68,7 @@ class AdminPostController extends AbstractController
             "table" => "user",
             "condition" => "p.user",
             "fields" => ["id", "email"]
-        ]]); 
+        ]]);
 
 
         return $this->render('admin/posts/index', [
@@ -70,7 +80,7 @@ class AdminPostController extends AbstractController
     private function showCreateForm(): Response
     {
         $users = $this->userRepository->findAll();
-        
+
         return $this->render('admin/posts/create', [
             'error' => null,
             'csrfToken' => Csrf::generate(),
@@ -86,9 +96,10 @@ class AdminPostController extends AbstractController
             return new Response('Invalid CSRF token', 403);
         }
 
-        $title = trim($_POST['title'] ?? '');
-        $content = $_POST['content'] ?? '';
-        $userId = $_POST['user_id'] ?? null;
+        $post_data = sanitize_post_data();
+        $title = trim($post_data['title'] ?? '');
+        $content = $post_data['content'] ?? '';
+        $userId = $post_data['user_id'] ?? null;
 
         if ($title === '') {
             $users = $this->userRepository->findAll();
@@ -103,7 +114,7 @@ class AdminPostController extends AbstractController
         if ($userId) {
             $user = $this->userRepository->find($userId);
         }
-        
+
         if (!$user) {
             $userSession = Session::get('user');
             $user = $this->userRepository->find($userSession['id']);
@@ -119,14 +130,14 @@ class AdminPostController extends AbstractController
                     'users' => $users
                 ], 'admin');
             }
-             try {
+            try {
                 $image = $this->uploader->upload($_FILES['image']);
             } catch (\Exception $e) {
                 $users = $this->userRepository->findAll();
                 return $this->render('admin/posts/create', [
-                    'error' => "Erreur d'upload : " . $e->getMessage(),
-                    'csrfToken' => Csrf::generate(),
-                    'users' => $users
+                   'error' => "Erreur d'upload : " . $e->getMessage(),
+                   'csrfToken' => Csrf::generate(),
+                   'users' => $users
                 ], 'admin');
             }
         }
@@ -175,9 +186,10 @@ class AdminPostController extends AbstractController
             return new Response(PostRepository::POST_NOT_FOUND, 404);
         }
 
-        $title = trim($_POST['title'] ?? '');
-        $content = $_POST['content'] ?? '';
-        $user_id = $_POST['user_id'] ?? null;
+        $post_data = sanitize_post_data();
+        $title = trim($post_data['title'] ?? '');
+        $content = $post_data['content'] ?? '';
+        $user_id = $post_data['user_id'] ?? null;
 
         if ($title === '') {
             $users = $this->userRepository->findAll();
@@ -190,25 +202,25 @@ class AdminPostController extends AbstractController
         }
 
         if (isset($_FILES['image']) && $_FILES['image']['error'] !== UPLOAD_ERR_NO_FILE) {
-             if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
-                  $users = $this->userRepository->findAll();
-                  return $this->render('admin/posts/edit', [
-                        'post' => $post,
-                        'users' => $users,
-                        'error' => "Erreur lors du téléchargement de l'image.",
-                        'csrfToken' => Csrf::generate()
-                  ], 'admin');
-             }
-             try {
+            if ($_FILES['image']['error'] !== UPLOAD_ERR_OK) {
+                 $users = $this->userRepository->findAll();
+                 return $this->render('admin/posts/edit', [
+                       'post' => $post,
+                       'users' => $users,
+                       'error' => "Erreur lors du téléchargement de l'image.",
+                       'csrfToken' => Csrf::generate()
+                 ], 'admin');
+            }
+            try {
                 $image = $this->uploader->upload($_FILES['image']);
                 $post->setImage($image);
             } catch (\Exception $e) {
                 $users = $this->userRepository->findAll();
                 return $this->render('admin/posts/edit', [
-                    'post' => $post,
-                    'users' => $users,
-                    'error' => "Erreur d'upload : " . $e->getMessage(),
-                    'csrfToken' => Csrf::generate()
+                   'post' => $post,
+                   'users' => $users,
+                   'error' => "Erreur d'upload : " . $e->getMessage(),
+                   'csrfToken' => Csrf::generate()
                 ], 'admin');
             }
         }

@@ -1,14 +1,12 @@
 <?php
 
-
 namespace App\Lib\Commands;
 
 use App\Lib\Database\DatabaseConnexion;
 use App\Lib\Database\Dsn;
 
-
-class CreateDatabase extends AbstractCommand {
-    
+class CreateDatabase extends AbstractCommand
+{
     public function execute(): void
     {
         $db = new DatabaseConnexion();
@@ -26,7 +24,4 @@ class CreateDatabase extends AbstractCommand {
     public function redo(): void
     {
     }
-    
 }
-
-?>

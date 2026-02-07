@@ -4,7 +4,8 @@ namespace App\Lib\Annotations\AnnotationsDump;
 
 use App\Lib\Annotations\AbstractAnnotation;
 
-class PropertyAnnotationsDump {
+class PropertyAnnotationsDump
+{
     private string $name;
     private array $annotations;
 
@@ -14,30 +15,32 @@ class PropertyAnnotationsDump {
         $this->annotations = [];
     }
 
-    public function getName(): string {
+    public function getName(): string
+    {
         return $this->name;
     }
 
-    public function addAnnotation(string $annotationName, AbstractAnnotation $annotation): void {
+    public function addAnnotation(string $annotationName, AbstractAnnotation $annotation): void
+    {
         $this->annotations[$annotationName] = $annotation;
     }
 
-    public function getAnnotations(): array {
+    public function getAnnotations(): array
+    {
         return $this->annotations;
     }
-    
-    public function hasAnnotation(string $annotation): bool {
+
+    public function hasAnnotation(string $annotation): bool
+    {
         return array_key_exists($annotation, $this->getAnnotations());
     }
 
-    public function getAnnotation(string $annotation): AbstractAnnotation {
-        if($this->hasAnnotation($annotation) === false) {
+    public function getAnnotation(string $annotation): AbstractAnnotation
+    {
+        if ($this->hasAnnotation($annotation) === false) {
             throw new \Exception('annotation not found in property');
         }
 
         return $this->getAnnotations()[$annotation];
     }
 }
-
-
-?>

@@ -2,11 +2,9 @@
 
 namespace App\Lib\Commands;
 
-abstract class AbstractCommand {
-    public abstract function execute(): void;
-    public abstract function undo(): void;
-    public abstract function redo(): void;
+abstract class AbstractCommand
+{
+    abstract public function execute(): void;
+    abstract public function undo(): void;
+    abstract public function redo(): void;
 }
-
-
-?>

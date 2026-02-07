@@ -6,6 +6,7 @@ use App\Lib\Controllers\AbstractController;
 use App\Lib\Http\Request;
 use App\Lib\Http\Response;
 use App\Core\Session;
+use App\Lib\Cache\TransientManager;
 
 class DashboardController extends AbstractController
 {
@@ -19,9 +20,21 @@ class DashboardController extends AbstractController
         $user = Session::get("user");
 
         return $this->render(
-            'admin/dashboard',               
+            'admin/dashboard',
             ['title' => 'Dashboard Admin', 'user' => $user],
-            'admin'                  
+            'admin'
         );
+    }
+
+    public function clearCache(Request $request): Response
+    {
+        TransientManager::init();
+        TransientManager::clear();
+
+        $response = new Response();
+        $response->setStatus(302);
+        $response->addHeader('Location', '/admin');
+
+        return $response;
     }
 }

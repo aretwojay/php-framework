@@ -12,51 +12,52 @@ use App\Lib\Database\DatabaseConnexion;
 use App\Lib\Database\Dsn;
 use App\Lib\Entities\AbstractEntity;
 
-class CreateSchema extends AbstractCommand {
-
+class CreateSchema extends AbstractCommand
+{
     const string ENTITIES_NAMESPACE_PREFIX = "App\\Entities\\";
     const string CREATE_TABLE_FORMAT = 'CREATE TABLE IF NOT EXISTS %s (%s);';
 
-    public function execute(): void {
+    public function execute(): void
+    {
         $entitiesClasses = self::getEntitiesClasses();
         $statement = '';
 
         $classesAnnotationsDump = [];
 
-        foreach($entitiesClasses as $entityClass) {
+        foreach ($entitiesClasses as $entityClass) {
             $classesAnnotationsDump[] = AnnotationReader::extractFromClass($entityClass);
         }
 
         $sortedClassesAnnotationsDump = [];
 
-        while(count($sortedClassesAnnotationsDump) < count($classesAnnotationsDump)) {
-        	foreach($classesAnnotationsDump as $class) {
-            	if(array_key_exists($class->getName(), $sortedClassesAnnotationsDump) === true) {
-            		continue;
-            	}
+        while (count($sortedClassesAnnotationsDump) < count($classesAnnotationsDump)) {
+            foreach ($classesAnnotationsDump as $class) {
+                if (array_key_exists($class->getName(), $sortedClassesAnnotationsDump) === true) {
+                    continue;
+                }
 
-            	if($class->propertiesHaveAnnotation(References::class) === false) {
-            		$sortedClassesAnnotationsDump[$class->getName()] = $class;
-            	    continue;
-            	}
-	
-            	$referencesCount = count($class->getPropertiesWithAnnotation(References::class));
-            	foreach($sortedClassesAnnotationsDump as $name => $weightedClass) {
-            	    foreach($class->getPropertiesWithAnnotation(References::class) as $property) {
-            	        if($name === $property->getAnnotation(References::class)->class) {
-                			$referencesCount--;
-            	        }
-            	    }
-            	}
-	
-            	if($referencesCount === 0) {
-            		$sortedClassesAnnotationsDump[$class->getName()] = $class;
-            		continue;
-            	}
+                if ($class->propertiesHaveAnnotation(References::class) === false) {
+                    $sortedClassesAnnotationsDump[$class->getName()] = $class;
+                    continue;
+                }
+
+                $referencesCount = count($class->getPropertiesWithAnnotation(References::class));
+                foreach ($sortedClassesAnnotationsDump as $name => $weightedClass) {
+                    foreach ($class->getPropertiesWithAnnotation(References::class) as $property) {
+                        if ($name === $property->getAnnotation(References::class)->class) {
+                            $referencesCount--;
+                        }
+                    }
+                }
+
+                if ($referencesCount === 0) {
+                    $sortedClassesAnnotationsDump[$class->getName()] = $class;
+                    continue;
+                }
             }
         }
 
-        foreach($sortedClassesAnnotationsDump as $classAnnotionsDump) {
+        foreach ($sortedClassesAnnotationsDump as $classAnnotionsDump) {
             $properties = $classAnnotionsDump->getProperties();
             $properties = self::sanitizeProperties($properties);
 
@@ -77,31 +78,32 @@ class CreateSchema extends AbstractCommand {
         $db->getConnexion()->exec($statement);
     }
 
-    public function undo(): void {
-        
+    public function undo(): void
+    {
     }
 
-    public function redo(): void {
-        
+    public function redo(): void
+    {
     }
 
-    private static function getEntitiesClasses(): array {
+    private static function getEntitiesClasses(): array
+    {
         $entitiesClasses = [];
 
         $files = scandir(__DIR__ . '/../../Entities');
 
-        foreach($files as $file) {
-            if($file === '.' || $file === '..') {
+        foreach ($files as $file) {
+            if ($file === '.' || $file === '..') {
                 continue;
             }
-            
+
             $className = self::ENTITIES_NAMESPACE_PREFIX . pathinfo($file, PATHINFO_FILENAME);
 
-            if(!class_exists($className)) {
+            if (!class_exists($className)) {
                 continue;
             }
 
-            if(!is_subclass_of($className, AbstractEntity::class)) {
+            if (!is_subclass_of($className, AbstractEntity::class)) {
                 continue;
             }
 
@@ -112,21 +114,23 @@ class CreateSchema extends AbstractCommand {
         return $entitiesClasses;
     }
 
-    private static function getSqlCreateTableScript(string $className, array $properties): string {
+    private static function getSqlCreateTableScript(string $className, array $properties): string
+    {
         $propertiesStatement = '';
-        
-        foreach($properties as $propertyAnnotationsDump) {
+
+        foreach ($properties as $propertyAnnotationsDump) {
             $propertiesStatement .= self::getSqlPropertyScript($propertyAnnotationsDump);
         }
 
-        return sprintf(self::CREATE_TABLE_FORMAT,  strtolower((new \ReflectionClass($className))->getShortName()), rtrim($propertiesStatement, ','));
+        return sprintf(self::CREATE_TABLE_FORMAT, strtolower((new \ReflectionClass($className))->getShortName()), rtrim($propertiesStatement, ','));
     }
-    
-    private static function getSqlPropertyScript(PropertyAnnotationsDump $propertyAnnotationsDump): string {
+
+    private static function getSqlPropertyScript(PropertyAnnotationsDump $propertyAnnotationsDump): string
+    {
         $statement = '';
 
         $propertyName = $propertyAnnotationsDump->getName();
-        if($propertyAnnotationsDump->getAnnotation(Column::class)->name !== null) {
+        if ($propertyAnnotationsDump->getAnnotation(Column::class)->name !== null) {
             $propertyName = $propertyAnnotationsDump->getAnnotation(Column::class)->name;
         }
 
@@ -134,40 +138,41 @@ class CreateSchema extends AbstractCommand {
 
         $statement .= $propertyAnnotationsDump->getAnnotation(Column::class)->type . '';
 
-        if($propertyAnnotationsDump->getAnnotation(Column::class)->size !== null) {
+        if ($propertyAnnotationsDump->getAnnotation(Column::class)->size !== null) {
             $statement .= '(' . $propertyAnnotationsDump->getAnnotation(Column::class)->size . ')';
         }
-        
-        if($propertyAnnotationsDump->getAnnotation(Column::class)->nullable === false) {
+
+        if ($propertyAnnotationsDump->getAnnotation(Column::class)->nullable === false) {
             $statement .= ' NOT NULL';
         }
-        
-        if($propertyAnnotationsDump->hasAnnotation(AutoIncrement::class) === true) {
+
+        if ($propertyAnnotationsDump->hasAnnotation(AutoIncrement::class) === true) {
             $statement .= ' AUTO_INCREMENT';
         }
-        
-        if($propertyAnnotationsDump->hasAnnotation(Id::class) === true) {
+
+        if ($propertyAnnotationsDump->hasAnnotation(Id::class) === true) {
             $statement .= ' PRIMARY KEY';
         }
 
-        if($propertyAnnotationsDump->getAnnotation(Column::class)->unique === true) {
+        if ($propertyAnnotationsDump->getAnnotation(Column::class)->unique === true) {
             $statement .= ' UNIQUE';
         }
 
         $statement .= ',';
 
-        if($propertyAnnotationsDump->hasAnnotation(References::class) === true) {
+        if ($propertyAnnotationsDump->hasAnnotation(References::class) === true) {
             $reflector = new \ReflectionClass($propertyAnnotationsDump->getAnnotation(References::class)->class);
             $statement .= PHP_EOL;
-            $statement .= 'FOREIGN KEY (' . $propertyName . ') REFERENCES ' . pathinfo($reflector->getFileName(), PATHINFO_FILENAME) . '(' .$propertyAnnotationsDump->getAnnotation(References::class)->property  . '),';
+            $statement .= 'FOREIGN KEY (' . $propertyName . ') REFERENCES ' . pathinfo($reflector->getFileName(), PATHINFO_FILENAME) . '(' . $propertyAnnotationsDump->getAnnotation(References::class)->property  . '),';
         }
 
         return $statement;
     }
-    
-    private static function sanitizeProperties(array $properties): array {
-        foreach($properties as $key=>$property) {
-            if($property->hasAnnotation(Column::class) === false) {
+
+    private static function sanitizeProperties(array $properties): array
+    {
+        foreach ($properties as $key => $property) {
+            if ($property->hasAnnotation(Column::class) === false) {
                 unset($properties[$key]);
             }
         }

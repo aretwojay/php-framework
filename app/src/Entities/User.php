@@ -20,7 +20,7 @@ class User extends AbstractEntity
     private string $email;
 
     #[Column(type: 'varchar', size: 255)]
-    private string $password; 
+    private string $password;
 
     #[Column(type: 'varchar', size: 50)]
     private string $role = 'user';

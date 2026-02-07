@@ -53,7 +53,7 @@ class PostRepository extends AbstractRepository
 
         if (!$post) {
             throw new \Exception(self::POST_NOT_FOUND, 404);
-     }
+        }
 
         $this->remove($post);
     }
