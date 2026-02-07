@@ -29,10 +29,19 @@ class PostController extends AbstractController
         $path   = $request->getPath();
         $method = $request->getMethod();
 
-        if ($path === '/api/posts' && $method === 'GET') {
+        if ($path === '/api/content' && $method === 'GET') {
             $this->index();
             exit;
         }
+
+        if (preg_match('#^/api/content/(\d+)$#', $path, $matches) && $method === 'GET') { 
+            return $this->getApiPost((int) $matches[1]);
+        }
+
+        if (preg_match('#^/api/content/(\d+)$#', $path, $matches) && $method === 'POST') { 
+            return $this->updateApiPost((int) $matches[1]);
+        }
+
 
         if ($path === '/posts' && $method === 'GET') {
             return $this->listPosts();
@@ -71,6 +80,7 @@ class PostController extends AbstractController
             return [
                 'id'    => $post->getId(),
                 'title' => $post->getTitle(),
+                'content' => $post->getContent(),
                 'slug'  => $post->getSlug(),
             ];
         }, $posts);
@@ -78,6 +88,51 @@ class PostController extends AbstractController
         header('Content-Type: application/json');
         http_response_code(200);
         echo json_encode($data);
+    }
+
+    private function getApiPost(int $id): Response
+    {
+        $post = $this->postRepository->findById($id);
+
+        if (!$post) {
+            return new Response(json_encode(['error' => 'Post not found']), 404, ['Content-Type' => 'application/json']);
+        }
+
+        $data = [
+            'id'      => $post->getId(),
+            'title'   => $post->getTitle(),
+            'slug'    => $post->getSlug(),
+            'content' => $post->getContent(),
+            'image'   => $post->getImage(),
+            'published' => $post->isPublished(),
+            'createdAt' => $post->getCreatedAt(),
+        ];
+
+        return new Response(json_encode($data), 200, ['Content-Type' => 'application/json']);
+    }
+
+    private function updateApiPost(int $id): Response
+    {
+        $post = $this->postRepository->findById($id);
+        
+        if (!$post) {
+            return new Response(json_encode(['error' => 'Post not found']), 404, ['Content-Type' => 'application/json']);
+        }
+
+        $title = $_POST['title'];
+        $content = $_POST['content'];
+
+        if ($title === '') {
+            return new Response(json_encode(['error' => 'Title is required']), 400, ['Content-Type' => 'application/json']);
+        }
+
+        $post->setTitle($title);
+        $post->setSlug($this->slugify($title));
+        $post->setContent($content);
+
+        $this->postRepository->update($post);
+
+        return new Response(json_encode(['message' => 'Post updated successfully']), 200, ['Content-Type' => 'application/json']);
     }
 
     private function listPosts(): Response
