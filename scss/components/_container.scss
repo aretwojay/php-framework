@@ -1,0 +1,20 @@
+@use "../partials/variables" as v;
+@layer components {
+  .container {
+    margin-inline: 2rem;
+    @each $name, $size in v.$breakpoints {
+      @media (width > $size) {
+        @if ($name == "sm") {
+          margin-inline: auto;
+        }
+        max-width: calc($size - 4rem);
+      }
+    }
+
+    &--fluid {
+      max-width: 100% !important;
+      margin-inline: 0;
+      padding-inline: 2rem;
+    }
+  }
+}

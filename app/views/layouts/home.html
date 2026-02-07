@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><?= $title ?? 'Accueil' ?></title>
+    <link rel="stylesheet" href="/public/css/main.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="container header__container">
+        <a href="/" class="header__brand">Mon Framework</a>
+        <nav class="navbar">
+          <ul class="navbar__list">
+            <li class="navbar__item">
+              <a href="/" class="navbar__link">Accueil</a>
+            </li>
+            <li class="navbar__item">
+              <a href="/posts" class="navbar__link">Articles</a>
+            </li>
+            <?php if (\App\Core\Session::get('user')): ?>
+            <li class="navbar__item">
+              <a href="/admin" class="navbar__link">Dashboard</a>
+            </li>
+            <li class="navbar__item">
+              <a href="/logout" class="navbar__link">Déconnexion</a>
+            </li>
+            <?php else: ?>
+            <li class="navbar__item">
+              <a href="/login" class="navbar__link">Connexion</a>
+            </li>
+            <li class="navbar__item">
+              <a href="/register" class="navbar__link">Inscription</a>
+            </li>
+            <?php endif; ?>
+          </ul>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container p--4 typography"><?= $content ?></main>
+
+    <footer class="footer">
+      <div class="container">
+        <p class="footer__text">&copy; <?= date('Y') ?> Mon Framework PHP</p>
+      </div>
+    </footer>
+  </body>
+</html>

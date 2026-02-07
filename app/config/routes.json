@@ -1,27 +1,138 @@
 [
   {
-    "path": "/artist",
+    "path": "/",
     "method": "GET",
-    "controller": "GetArtistsController"
+    "controller": "HomeController"
   },
   {
-    "path": "/artist/:id",
+    "path": "/design-guide",
     "method": "GET",
-    "controller": "GetArtistController"
+    "controller": "HomeController"
   },
   {
-    "path": "/artist",
+    "path": "/login",
+    "method": "GET",
+    "controller": "AuthController",
+    "middleware": "GuestMiddleware"
+  },
+  {
+    "path": "/login",
     "method": "POST",
-    "controller": "PostArtistController"
+    "controller": "AuthController"
   },
   {
-    "path": "/artist/:id",
-    "method": "PATCH",
-    "controller": "PatchArtistController"
+    "path": "/api/login",
+    "method": "POST",
+    "controller": "AuthController"
   },
   {
-    "path": "/artist/:id",
-    "method": "DELETE",
-    "controller": "DeleteArtistController"
+    "path": "/register",
+    "method": "GET",
+    "controller": "AuthController",
+    "middleware": "GuestMiddleware"
+  },
+  {
+    "path": "/register",
+    "method": "POST",
+    "controller": "AuthController"
+  },
+  {
+    "path": "/logout",
+    "method": "GET",
+    "controller": "AuthController"
+  },
+  {
+    "method": "GET",
+    "path": "/admin",
+    "controller": "DashboardController",
+    "action": "index",
+    "middleware": "AdminMiddleware"
+  },
+  {
+    "method": "GET",
+    "path": "/admin/posts",
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
+  },
+  {
+    "path": "/admin/posts/create",
+    "method": "GET",
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
+  },
+  {
+    "path": "/admin/posts/create",
+    "method": "POST",
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
+  },
+  {
+    "path": "/admin/posts/:id/edit",
+    "method": "GET",
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
+  },
+  {
+    "path": "/admin/posts/:id/edit",
+    "method": "POST",
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
+  },
+  {
+    "path": "/admin/posts/:id/delete",
+    "method": "POST",
+    "controller": "AdminPostController",
+    "middleware": "AdminMiddleware"
+  },
+  {
+    "path": "/posts",
+    "method": "GET",
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
+  },
+  {
+    "path": "/posts/create",
+    "method": "GET",
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
+  },
+  {
+    "path": "/posts/create",
+    "method": "POST",
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
+  },
+  {
+    "path": "/posts/:id/edit",
+    "method": "GET",
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
+  },
+  {
+    "path": "/posts/:id/edit",
+    "method": "POST",
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
+  },
+  {
+    "path": "/posts/:id/delete",
+    "method": "POST",
+    "controller": "PostController",
+    "middleware": "AuthMiddleware"
+  },
+  {
+    "path": "/api/content",
+    "method": "GET",
+    "controller": "PostController"
+  },
+  {
+    "path": "/api/content/:id",
+    "method": "GET",
+    "controller": "PostController"
+  },
+  {
+    "path": "/api/content/:id",
+    "method": "POST",
+    "controller": "PostController"
   }
 ]

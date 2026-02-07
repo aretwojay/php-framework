@@ -1,3 +1,5 @@
+/vendor
 app/vendor
 log
 mysql
+.env

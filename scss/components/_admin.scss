@@ -1,0 +1,118 @@
+@use "../partials/functions" as f;
+@use "../partials/variables" as v;
+
+@layer components {
+  .admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: var(--bg-color);
+
+    &__main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      margin-left: f.rem(250);
+      width: calc(100% - #{f.rem(250)});
+    }
+
+    &__content {
+      padding: f.rem(32);
+      padding-top: f.rem(96); // Topbar height + spacing
+    }
+  }
+
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: f.rem(250);
+    background-color: var(--black);
+    color: var(--white);
+    display: flex;
+    flex-direction: column;
+    z-index: 50;
+
+    &__header {
+      padding: f.rem(16) f.rem(24);
+      height: f.rem(64);
+      display: flex;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    &__title {
+      font-size: f.rem(20);
+      font-weight: 700;
+      margin: 0;
+      color: var(--white);
+    }
+
+    &__nav {
+      flex: 1;
+      padding: f.rem(24) 0;
+      overflow-y: auto;
+    }
+
+    &__list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    &__item {
+      margin-bottom: f.rem(4);
+    }
+
+    &__link {
+      display: flex;
+      align-items: center;
+      padding: f.rem(12) f.rem(24);
+      color: rgba(255, 255, 255, 0.7);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+
+      &:hover {
+        color: var(--white);
+        background-color: rgba(255, 255, 255, 0.1);
+      }
+
+      &--active {
+        color: var(--white);
+        background-color: var(--blue);
+
+        &:hover {
+          background-color: var(--blue);
+        }
+      }
+    }
+  }
+
+  .topbar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: f.rem(250);
+    height: f.rem(64);
+    background-color: var(--white);
+    border-bottom: 1px solid var(--lightgrey);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 f.rem(32);
+    z-index: 40;
+
+    &__user {
+      display: flex;
+      align-items: center;
+      gap: f.rem(8);
+      font-weight: 500;
+      color: var(--black);
+    }
+
+    &__avatar {
+      font-size: f.rem(20);
+    }
+  }
+}

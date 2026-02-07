@@ -5,6 +5,8 @@ namespace App\Lib\Repositories;
 use App\Lib\Database\DatabaseConnexion;
 use App\Lib\Database\Dsn;
 use App\Lib\Entities\AbstractEntity;
+use App\Lib\Annotations\ORM\Column;
+use App\Lib\Annotations\ORM\References;
 
 abstract class AbstractRepository
 {
@@ -39,25 +41,15 @@ abstract class AbstractRepository
     }
 
     public function getTable(): string {
-        return str_replace('Repository','',(new \ReflectionClass($this))->getShortName());
+        return strtolower(str_replace('Repository','',(new \ReflectionClass($this))->getShortName()));
     }
 
     private function getFields(AbstractEntity $entity): string {
-        $fields = [];
-        foreach ($entity->toArray() as $key => $value) {
-            $fields[] = $key;
-        }
-
-        return implode(', ', $fields);
+        return implode(', ', array_keys($entity->toArray()));
     }
 
     private function getValues(AbstractEntity $entity): string {
-        $values = [];
-        foreach ($entity->toArray() as $key => $value) {
-            $values[] = ':' . $key;
-        }
-
-        return implode(', ', $values);
+        return implode(', ', array_map(fn($k) => ":$k", array_keys($entity->toArray())));
     }
 
     public function queryBuilder(): self {
@@ -67,13 +59,7 @@ abstract class AbstractRepository
 
     public function select(...$fields): self {
         $this->queryString .= "SELECT";
-
-        if(count($fields) === 0) {
-            $this->queryString .= ' *';
-            return $this;
-        }
-
-        $this->queryString .= ' ' . implode(', ', $fields);
+        $this->queryString .= count($fields) === 0 ? ' *' : ' ' . implode(', ', $fields);
         return $this;
     }
 
@@ -100,7 +86,6 @@ abstract class AbstractRepository
     public function from(string $tableAlias): self {
         $table = $this->getTable();
         $this->queryString .= " FROM $table";
-        
         return $this->as($tableAlias);
     }
 
@@ -110,25 +95,29 @@ abstract class AbstractRepository
         return $this;
     }
 
+    public function innerJoin(string $table, string $alias, string $condition): self {
+        $this->queryString .= " INNER JOIN $table AS $alias ON $alias.id = $condition";
+        return $this;
+    }
+
+    public function leftJoin(string $table, string $alias, string $condition): self {
+        $this->queryString .= " LEFT JOIN $table AS $alias ON $alias.id = $condition";
+        return $this;
+    }
+
     public function andWhere(string $field, string $condition, ?string $table = null): self {
-        $this->queryString .= " AND  ";
+        $this->queryString .= " AND ";
         return $this->where($field, $condition, $table);
     }
 
     public function orWhere(string $field, string $condition, ?string $table = null): self {
-        $this->queryString .= " OR  ";
+        $this->queryString .= " OR ";
         return $this->where($field, $condition, $table);
     }
 
     public function where(string $field, string $condition, ?string $table = null): self {
-        $this->queryString .= " WHERE ";
-        if($table !== null) {
-            $this->queryString .= "$table.";
-        }else {
-            $this->queryString .= "$this->tableAlias.";
-        }
-
-        $this->queryString .= "$field $condition :$field";
+        $this->queryString .= strpos($this->queryString, 'WHERE') === false ? " WHERE " : " AND ";
+        $this->queryString .= ($table ?? $this->tableAlias) . ".$field $condition :$field";
         return $this;
     }
 
@@ -144,57 +133,66 @@ abstract class AbstractRepository
 
     public function executeQuery(): self {
         $this->query = $this->db->getConnexion()->prepare($this->queryString);
-
         $this->query->execute($this->params);
         return $this;
     }
 
+    // -------------------- FETCH --------------------
     public function getOneResult() {
-        $this->query->setFetchMode(\PDO::FETCH_CLASS, 'App\Entities\\' . ucfirst($this->getTable()));
+        $class = 'App\Entities\\' . ucfirst($this->getTable());
+        $this->query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
         return $this->query->fetch();
     }
 
     public function getAllResults(): array {
-        $this->query->setFetchMode(\PDO::FETCH_CLASS, 'App\Entities\\' . ucfirst($this->getTable()));
+        $class = 'App\Entities\\' . ucfirst($this->getTable());
+        $this->query->setFetchMode(\PDO::FETCH_CLASS | \PDO::FETCH_PROPS_LATE, $class);
         return $this->query->fetchAll();
     }
 
-    public function find(string | int $id) {
-        return $this->findOneBy(['id' => $id]);
+    public function find(string|int $id, array $relations = []): ?AbstractEntity {
+        return $this->findOneBy(['id' => $id], $relations);
     }
 
-    public function findAll(): array {
-        return $this->findBy([]);
+    public function findAll(array $relations = []): array {
+        return $this->findBy([], $relations);
     }
 
-    public function findBy(array $criteria) {
-        $this->queryBuilder()
-            ->select()
-            ->from(substr($this->getTable(), 0, 1))
-        ;
-
-        $this->addWhereAccordingToCriterias($criteria);
-
-        return $this->executeQuery()
-            ->getAllResults();
-    }
-
-    public function findOneBy(array $criteria) {
-        $this->queryBuilder()
-            ->select()
-            ->from(substr($this->getTable(), 0, 1))
-            ;
-
-        $this->addWhereAccordingToCriterias($criteria);
-
-        $data = $this->executeQuery()
-            ->getOneResult();
-
-        if($data === false) {
-            return null;
+    public function findBy(array $criteria, array $relations = []): array {
+        $alias = substr($this->getTable(), 0, 1);
+        $fields = [$alias . '.*'];
+        
+        foreach ($relations as $relationAlias => $config) {
+            if (isset($config['fields'])) {
+                foreach ($config['fields'] as $field) {
+                    $fields[] = $relationAlias . '.' . $field . ' AS ' . $relationAlias . '_' . $field;
+                }
+            }
         }
 
-        return $data;
+        $this->queryBuilder()->select(...$fields)->from($alias);
+        $this->addInnerJoinAccordingToRelations($relations);
+        $this->addWhereAccordingToCriterias($criteria);
+        return $this->executeQuery()->getAllResults();
+    }
+
+    public function findOneBy(array $criteria, array $relations = []) {
+        $alias = substr($this->getTable(), 0, 1);
+        $fields = [$alias . '.*'];
+        
+        foreach ($relations as $relationAlias => $config) {
+            if (isset($config['fields'])) {
+                foreach ($config['fields'] as $field) {
+                    $fields[] = $relationAlias . '.' . $field . ' AS ' . $relationAlias . '_' . $field;
+                }
+            }
+        }
+
+        $this->queryBuilder()->select(...$fields)->from($alias);
+        $this->addInnerJoinAccordingToRelations($relations);
+        $this->addWhereAccordingToCriterias($criteria);
+        $data = $this->executeQuery()->getOneResult();
+        return $data === false ? null : $data;
     }
 
     private function addWhereAccordingToCriterias(array $criterias) {
@@ -208,25 +206,23 @@ abstract class AbstractRepository
         }
     }
 
-    public function set(AbstractEntity $entity): self {
+    private function addInnerJoinAccordingToRelations(array $relations) {
+        foreach($relations as $alias => $config) {
+            $this->innerJoin($config['table'], $alias, $config['condition']);
+        }
+    }
 
+    public function set(AbstractEntity $entity): self {
         $this->queryString .= " SET";
         foreach ($entity->toArray() as $key => $value) {
             $this->queryString .= " $key = :$key,";
         }
-
         $this->queryString = rtrim($this->queryString, ',');
-
         return $this;
     }
 
     public function save(AbstractEntity $entity): string {
-        $this->queryBuilder()
-            ->insert($entity)
-            ->values($entity)
-            ->setParams($entity->toArray())
-        ;
-
+        $this->queryBuilder()->insert($entity)->values($entity)->setParams($entity->toArray());
         $this->executeQuery();
         return $this->db->getConnexion()->lastInsertId();
     }
@@ -239,7 +235,6 @@ abstract class AbstractRepository
             ->where('id', self::CONDITIONS['eq'])
             ->setParams($entity->toArray())
             ->executeQuery();
-        $this->executeQuery();
     }
 
     public function remove(AbstractEntity $entity) {
@@ -249,5 +244,10 @@ abstract class AbstractRepository
             ->where('id', self::CONDITIONS['eq'])
             ->addParam('id', $entity->getId())
             ->executeQuery();
+    }
+
+    public function debug(): self
+    {
+        return $this;
     }
 }

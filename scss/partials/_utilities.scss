@@ -1,0 +1,71 @@
+@layer utilities {
+  @for $i from 0 through 6 {
+    .m--#{$i} {
+      margin: calc($i * var(--spacing));
+    }
+    .mt--#{$i} {
+      margin-top: calc($i * var(--spacing));
+    }
+    .mb--#{$i} {
+      margin-bottom: calc($i * var(--spacing));
+    }
+    .ml--#{$i} {
+      margin-inline-start: calc($i * var(--spacing));
+    }
+    .mr--#{$i} {
+      margin-inline-end: calc($i * var(--spacing));
+    }
+
+    .p--#{$i} {
+      padding: calc($i * var(--spacing));
+    }
+    .pt--#{$i} {
+      padding-top: calc($i * var(--spacing));
+    }
+    .pb--#{$i} {
+      padding-bottom: calc($i * var(--spacing));
+    }
+    .pl--#{$i} {
+      padding-inline-start: calc($i * var(--spacing));
+    }
+    .pr--#{$i} {
+      padding-inline-end: calc($i * var(--spacing));
+    }
+
+    .gap--#{$i} {
+      gap: calc($i * var(--spacing));
+    }
+  }
+
+  .d-flex {
+    display: flex;
+  }
+  .justify-content-between {
+    justify-content: space-between;
+  }
+  .justify-content-center {
+    justify-content: center;
+  }
+  .justify-content-end {
+    justify-content: flex-end;
+  }
+  .align-items-center {
+    align-items: center;
+  }
+  .flex-wrap {
+    flex-wrap: wrap;
+  }
+
+  .text-center {
+    text-align: center;
+  }
+  .text-right {
+    text-align: right;
+  }
+
+  .img-cover {
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+  }
+}

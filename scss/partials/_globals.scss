@@ -1,0 +1,39 @@
+@use "fonts" as f;
+@use "variables" as v;
+@use "sass:color";
+@layer base {
+  :root {
+    --spacing: #{v.$spacing};
+
+    @each $name, $value in v.$colors {
+      --#{$name}: #{$value};
+      --#{$name}-hover: #{color.scale($value, $lightness: 20%)};
+    }
+
+    // couleurs agnostiques
+    --bg-color: var(--bg-color);
+    --text-color: var(--black-hover); // nom de variable bizarre... faisons avec
+    --border-color: var(--lightgrey);
+
+    @media (prefers-color-scheme: dark) {
+      --bg-color: var(--dark-bg-color);
+      --text-color: var(--white);
+      --border-color: #495057; // grey-ish for dark mode
+    }
+  }
+
+  body {
+    font-family: f.$mainFont;
+    background-color: var(--bg-color);
+    color: var(--text-color);
+  }
+
+  button {
+    all: unset;
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}

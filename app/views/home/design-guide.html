@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Design Guide</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- CSS compilé -->
+    <link rel="stylesheet" href="/public/css/main.css" />
+
+    <style>
+      body {
+        padding: 2rem;
+      }
+
+      section {
+        margin-bottom: 4rem;
+      }
+
+      section h2 {
+        margin-bottom: 1.5rem;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 0.5rem;
+      }
+
+      .demo-row {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        align-items: center;
+      }
+
+      .demo-column {
+        max-width: 400px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Design Guide – UI Components</h1>
+
+    <!-- ================= BUTTONS ================= -->
+    <section>
+      <h2>Boutons</h2>
+      <div class="demo-row">
+        <a href="#" class="button">Default</a>
+        <a href="#" class="button button--primary">Primary</a>
+        <a href="#" class="button button--secondary">Secondary</a>
+        <a href="#" class="button button--danger">Danger</a>
+      </div>
+      <div class="demo-row">
+        <a href="#" class="button button--sm">Small</a>
+        <a href="#" class="button">Normal</a>
+        <a href="#" class="button button--lg">Large</a>
+      </div>
+      <div class="demo-row">
+        <button class="button" disabled>Disabled</button>
+      </div>
+    </section>
+
+    <!-- ================= FORMS ================= -->
+    <section>
+      <h2>Formulaires</h2>
+      <div class="demo-column">
+        <label class="form__label">Email</label>
+        <input
+          type="email"
+          class="form__input"
+          placeholder="email@example.com"
+        />
+        <label class="form__label">Mot de passe</label>
+        <input type="password" class="form__input" />
+        <div class="form__error">Message d'erreur exemple</div>
+        <label class="form__label">Champ désactivé</label>
+        <input
+          type="text"
+          class="form__input"
+          disabled
+          value="Disabled input"
+        />
+        <div class="form__group form__group--checkbox" style="margin-top: 1rem">
+          <input type="checkbox" id="check1" name="check1" />
+          <label for="check1">Checkbox standard</label>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BADGES ================= -->
+    <section>
+      <h2>Badges</h2>
+      <div class="demo-row">
+        <span class="badge">Default</span>
+        <span class="badge badge--success">Success</span>
+        <span class="badge badge--warning">Warning</span>
+        <span class="badge badge--danger">Danger</span>
+      </div>
+    </section>
+
+    <!-- ================= PAGINATION ================= -->
+    <section>
+      <h2>Pagination</h2>
+      <nav class="pagination">
+        <ul class="pagination__list">
+          <li><a href="#" class="pagination__link">Previous</a></li>
+          <li><a href="#" class="pagination__link">1</a></li>
+          <li>
+            <a href="#" class="pagination__link pagination__link--active">2</a>
+          </li>
+          <li><a href="#" class="pagination__link">3</a></li>
+          <li><a href="#" class="pagination__link">Next</a></li>
+        </ul>
+      </nav>
+    </section>
+
+    <!-- ================= MODAL ================= -->
+    <section>
+      <h2>Modale</h2>
+      <button
+        class="button button--primary"
+        onclick="
+          document.getElementById('demo-modal').classList.add('modal--is-open')
+        "
+      >
+        Ouvrir la modale
+      </button>
+
+      <div class="modal" id="demo-modal">
+        <div class="modal__content">
+          <button
+            class="modal__close"
+            onclick="
+              document
+                .getElementById('demo-modal')
+                .classList.remove('modal--is-open')
+            "
+          >
+            &times;
+          </button>
+          <h3 class="modal__title">Titre de la modale</h3>
+          <p>Ceci est le contenu de la fenêtre modale.</p>
+          <div class="mt--4">
+            <button
+              class="button button--primary"
+              onclick="
+                document
+                  .getElementById('demo-modal')
+                  .classList.remove('modal--is-open')
+              "
+            >
+              Confirmer
+            </button>
+            <button
+              class="button button--secondary"
+              onclick="
+                document
+                  .getElementById('demo-modal')
+                  .classList.remove('modal--is-open')
+              "
+            >
+              Annuler
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= CARDS ================= -->
+    <section>
+      <h2>Cards</h2>
+      <div class="demo-row">
+        <div class="card">
+          <img src="https://picsum.photos/320/200" alt="" class="card__image" />
+          <h3 class="card__title">Titre de la card</h3>
+          <p class="card__text">
+            Ceci est un exemple de contenu pour une card.
+          </p>
+          <a href="#" class="button button--primary">Action</a>
+        </div>
+        <div class="card">
+          <h3 class="card__title">Card sans image</h3>
+          <p class="card__text">Card simple avec texte uniquement.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= TABLES ================= -->
+    <section>
+      <h2>Tables</h2>
+      <h3>Table Standard</h3>
+      <div class="card p--0 mb--4">
+        <table class="table m--0">
+          <thead>
+            <tr>
+              <th class="pl--4">ID</th>
+              <th>Nom</th>
+              <th>Statut</th>
+              <th class="pr--4 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="pl--4">1</td>
+              <td>Article #1</td>
+              <td><span class="badge badge--success">Publié</span></td>
+              <td class="pr--4 text-right">
+                <a href="#" class="button button--small button--secondary"
+                  >Modifier</a
+                >
+              </td>
+            </tr>
+            <tr>
+              <td class="pl--4">2</td>
+              <td>Article #2</td>
+              <td><span class="badge badge--warning">Brouillon</span></td>
+              <td class="pr--4 text-right">
+                <a href="#" class="button button--small button--secondary"
+                  >Modifier</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Admin Table (Legacy)</h3>
+      <table class="admin-table">
+        <thead class="admin-table__header">
+          <tr>
+            <th class="admin-table__cell">ID</th>
+            <th class="admin-table__cell">Nom</th>
+            <th class="admin-table__cell">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="admin-table__row">
+            <td class="admin-table__cell">1</td>
+            <td class="admin-table__cell">Artist One</td>
+            <td class="admin-table__cell admin-table__actions">
+              <a href="#">Edit</a>
+              <a href="#">Delete</a>
+            </td>
+          </tr>
+          <tr class="admin-table__row">
+            <td class="admin-table__cell">2</td>
+            <td class="admin-table__cell">Artist Two</td>
+            <td class="admin-table__cell admin-table__actions">
+              <a href="#">Edit</a>
+              <a href="#">Delete</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ================= TYPOGRAPHY ================= -->
+    <section class="typography">
+      <h1>Heading H1</h1>
+      <h2>Heading H2</h2>
+      <h3>Heading H3</h3>
+      <p>
+        Texte standard – Lorem ipsum dolor sit amet, consectetur adipisicing
+        elit.
+      </p>
+    </section>
+  </body>
+</html>

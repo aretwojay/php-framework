@@ -1,0 +1,71 @@
+<div class="container--fluid">
+  <div class="d-flex justify-content-between align-items-center mb--4">
+    <h1 class="h2 m--0">Modifier l'article</h1>
+    <a href="/admin/posts" class="button button--secondary">Retour</a>
+  </div>
+
+  <div class="card card--full p--4">
+    <?php if (isset($error)): ?>
+        <div class="alert alert--danger mb--4"><?= $error ?></div>
+    <?php endif; ?>
+
+    <form action="/admin/posts/<?= $post->getId() ?>/edit" method="POST" enctype="multipart/form-data" class="form">
+      <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+
+      <div class="form__group">
+        <label for="title" class="form__label">Titre</label>
+        <input type="text" id="title" name="title" class="form__input" value="<?= htmlspecialchars($post->getTitle()) ?>" required />
+      </div>
+
+      <div class="form__group">
+          <label for="image" class="form__label">Image</label>
+          <?php if ($post->getImage()): ?>
+              <div class="mb--2">
+                  <img src="<?= htmlspecialchars($post->getImage()) ?>" alt="Current Image" style="max-width: 200px; border-radius: 6px;">
+              </div>
+          <?php endif; ?>
+          <input type="file" id="image" name="image" class="form__input form__input--file" accept="image/png, image/jpeg, image/webp" />
+          <small style="color: var(--grey); font-size: 0.8em; display: block; margin-top: 4px;">Laisser vide pour conserver l'image actuelle</small>
+      </div>
+
+      <div class="form__group">
+        <label for="content" class="form__label">Contenu</label>
+        <textarea id="content" name="content" class="form__input form__textarea"><?= htmlspecialchars($post->getContent()) ?></textarea>
+      </div>
+
+      <div class="form__group">
+        <label for="user_id" class="form__label">Auteur</label>
+        <select name="user_id" id="user_id" class="form__input">
+            <?php foreach ($users as $author): ?>
+                <option value="<?= $author->getId() ?>" <?= $post->getUser() === $author->getId() ? 'selected' : '' ?>>
+                    <?= $author->getEmail() ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+      </div>
+
+      <div class="form__group form__group--checkbox">
+        <input type="checkbox" id="published" name="published" value="1" <?= $post->isPublished() ? 'checked' : '' ?> />
+        <label for="published">Publié</label>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt--4">
+        <button type="submit" class="button button--primary">Mettre à jour</button>
+
+        <button 
+            type="submit" 
+            form="delete-form" 
+            class="button button--danger"
+            onclick="return confirm('Supprimer cet article ?');"
+         >
+            Supprimer
+         </button>
+      </div>
+    </form>
+    
+    <!-- Hidden form for deletion -->
+    <form id="delete-form" action="/admin/posts/<?= $post->getId() ?>/delete" method="POST" style="display: none;">
+        <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
+    </form>
+  </div>
+</div>

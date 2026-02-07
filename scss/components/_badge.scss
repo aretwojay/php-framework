@@ -1,0 +1,28 @@
+@use "../partials/functions" as f;
+@use "../partials/variables" as v;
+@use "sass:color";
+
+@layer components {
+  .badge {
+    display: inline-block;
+    padding: f.rem(4) f.rem(8);
+    font-size: f.rem(12);
+    font-weight: 600;
+    border-radius: f.rem(4);
+    color: var(--white);
+    background-color: var(--grey);
+
+    &--success {
+      background-color: var(--green);
+    }
+
+    &--warning {
+      background-color: var(--yellow);
+      color: var(--black);
+    }
+
+    &--danger {
+      background-color: var(--red);
+    }
+  }
+}

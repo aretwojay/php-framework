@@ -119,7 +119,7 @@ class CreateSchema extends AbstractCommand {
             $propertiesStatement .= self::getSqlPropertyScript($propertyAnnotationsDump);
         }
 
-        return sprintf(self::CREATE_TABLE_FORMAT, (new \ReflectionClass($className))->getShortName(), rtrim($propertiesStatement, ','));
+        return sprintf(self::CREATE_TABLE_FORMAT,  strtolower((new \ReflectionClass($className))->getShortName()), rtrim($propertiesStatement, ','));
     }
     
     private static function getSqlPropertyScript(PropertyAnnotationsDump $propertyAnnotationsDump): string {
@@ -148,6 +148,10 @@ class CreateSchema extends AbstractCommand {
         
         if($propertyAnnotationsDump->hasAnnotation(Id::class) === true) {
             $statement .= ' PRIMARY KEY';
+        }
+
+        if($propertyAnnotationsDump->getAnnotation(Column::class)->unique === true) {
+            $statement .= ' UNIQUE';
         }
 
         $statement .= ',';

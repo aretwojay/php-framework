@@ -1,0 +1,22 @@
+@use "../partials/functions" as f;
+
+@layer components {
+  .header {
+    background-color: var(--bg-color);
+    padding: f.rem(16) 0;
+    border-bottom: 1px solid var(--grey);
+
+    &__container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    &__brand {
+      font-size: f.rem(24);
+      font-weight: 700;
+      color: var(--text-color);
+      text-decoration: none;
+    }
+  }
+}
