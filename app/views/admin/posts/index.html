@@ -31,7 +31,7 @@
               class="table__img"
             />
             <?php else: ?>
-            <span style="color: var(--grey)">-</span>
+            <span class="text--muted">-</span>
             <?php endif; ?>
           </td>
           <td>
@@ -60,7 +60,7 @@
               <form
                 action="/admin/posts/<?= $post->getId() ?>/delete"
                 method="POST"
-                style="display: inline"
+                class="form--inline"
                 onsubmit="return confirm('Supprimer cet article ?');"
               >
                 <input

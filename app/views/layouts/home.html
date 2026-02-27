@@ -9,7 +9,7 @@
   <body>
     <header class="header">
       <div class="container header__container">
-        <a href="/" class="header__brand">Mon Framework</a>
+        <a href="/" class="header__brand">NextCMS</a>
         <nav class="navbar">
           <ul class="navbar__list">
             <li class="navbar__item">
@@ -18,10 +18,12 @@
             <li class="navbar__item">
               <a href="/posts" class="navbar__link">Articles</a>
             </li>
-            <?php if (\App\Core\Session::get('user')): ?>
+            <?php if (\App\Core\Session::get('user')): ?> <?php if
+            (\App\Core\Session::get('user')['role'] === 'admin'): ?>
             <li class="navbar__item">
               <a href="/admin" class="navbar__link">Dashboard</a>
             </li>
+            <?php endif; ?>
             <li class="navbar__item">
               <a href="/logout" class="navbar__link">Déconnexion</a>
             </li>
@@ -42,7 +44,7 @@
 
     <footer class="footer">
       <div class="container">
-        <p class="footer__text">&copy; <?= date('Y') ?> Mon Framework PHP</p>
+        <p class="footer__text">&copy; <?= date('Y') ?> NextCMS</p>
       </div>
     </footer>
   </body>

@@ -15,5 +15,16 @@ try {
     echo $response->getContent();
     exit();
 } catch(\Exception $e) {
-    echo $e->getMessage();
+    if ($e->getCode() === 404) {
+        http_response_code(404);
+        $title = 'Page introuvable';
+        ob_start();
+        require_once __DIR__ . '/../views/errors/404.html';
+        $content = ob_get_clean();
+        ob_start();
+        require_once __DIR__ . '/../views/layouts/home.html';
+        echo ob_get_clean();
+    } else {
+        echo $e->getMessage();
+    }
 }

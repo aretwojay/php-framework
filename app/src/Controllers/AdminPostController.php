@@ -49,7 +49,7 @@ class AdminPostController extends AbstractController
             return $this->handleDelete((int)$matches[1]);
         }
 
-        return new Response("Page not found", 404);
+        return $this->render404();
     }
 
     public function index(Request $request): Response
@@ -150,7 +150,7 @@ class AdminPostController extends AbstractController
         $users = $this->userRepository->findAll();
 
         if (!$post) {
-            return new Response(PostRepository::POST_NOT_FOUND, 404);
+            return $this->render404();
         }
 
         return $this->render('admin/posts/edit', [
@@ -172,7 +172,7 @@ class AdminPostController extends AbstractController
         $post = $this->postRepository->findById($id);
 
         if (!$post) {
-            return new Response(PostRepository::POST_NOT_FOUND, 404);
+            return $this->render404();
         }
 
         $title = trim($_POST['title'] ?? '');

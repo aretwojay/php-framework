@@ -27,14 +27,14 @@ class AuthController extends AbstractController
             if ($method === 'POST') {
                 return $this->registerProcess();
             }
-            return $this->render('auth/register', ['title' => 'Inscription']);
+            return $this->render('auth/register', ['title' => 'Inscription'], 'home');
         }
 
         if ($path === '/login') {
             if ($method === 'POST') {
                 return $this->loginProcess();
             }
-            return $this->render('auth/login', ['title' => 'Connexion']);
+            return $this->render('auth/login', ['title' => 'Connexion'], 'home');
         }
 
         if ($path === '/api/login') {
@@ -47,7 +47,7 @@ class AuthController extends AbstractController
             return $this->logout();
         }
 
-        return new Response("Page not found", 404);
+        return $this->render404();
     }
 
     private function registerProcess(): Response
@@ -81,7 +81,7 @@ class AuthController extends AbstractController
             return new Response('', 302, ['Location' => '/login']);
         }
 
-        return $this->render('auth/register', ['errors' => $errors, 'title' => 'Inscription']);
+        return $this->render('auth/register', ['errors' => $errors, 'title' => 'Inscription'], 'home');
     }
 
     private function loginProcess(): Response
@@ -100,7 +100,7 @@ class AuthController extends AbstractController
             return new Response('', 302, ['Location' => '/']);
         }
 
-        return $this->render('auth/login', ['error' => 'Identifiants incorrects.', 'title' => 'Connexion']);
+        return $this->render('auth/login', ['error' => 'Identifiants incorrects.', 'title' => 'Connexion'], 'home');
     }
 
     private function apiLoginProcess(): Response
