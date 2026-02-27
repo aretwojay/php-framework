@@ -1,0 +1,33 @@
+@use "../partials/functions" as f;
+
+@layer components {
+  .error-page {
+    text-align: center;
+    padding-top: f.rem(80);
+    padding-bottom: f.rem(80);
+
+    &__code {
+      font-size: f.rem(96);
+      margin-bottom: 0;
+      color: var(--primary);
+    }
+
+    &__message {
+      color: var(--grey);
+      max-width: f.rem(480);
+      margin: 0 auto f.rem(32);
+    }
+  }
+
+  .post {
+    &__image {
+      max-width: 100%;
+      height: auto;
+      border-radius: f.rem(8);
+    }
+
+    &__meta {
+      color: var(--grey);
+    }
+  }
+}

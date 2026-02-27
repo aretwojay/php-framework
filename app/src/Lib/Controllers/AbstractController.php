@@ -28,4 +28,9 @@ abstract class AbstractController {
 
         return $response;
     }
+
+    protected function render404(): Response
+    {
+        return $this->render('errors/404', ['title' => 'Page introuvable'], 'home')->setStatus(404);
+    }
 }

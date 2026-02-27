@@ -21,8 +21,9 @@ class Response {
         return $this->content;
     }
     
-    public function setStatus(int $status): void{
+    public function setStatus(int $status): self {
         $this->status = $status;
+        return $this;
     }
     
     public function getStatus(): int {

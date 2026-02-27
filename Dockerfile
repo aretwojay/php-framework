@@ -18,4 +18,7 @@ RUN apt-get install -y nodejs
 RUN a2enmod rewrite
 RUN service apache2 restart
 
+# Copy project files
+COPY ./app /var/www/html/
+
 EXPOSE 80

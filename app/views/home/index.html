@@ -1,2 +1,24 @@
-<h1>Bienvenue sur la page d'accueil</h1>
-<p>Ceci est la page d'accueil.</p>
+<h1 class="mb--4">Bienvenue sur la page d'accueil</h1>
+<div class="card-container">
+  <?php for ($i = 0; $i < count($posts); $i++): ?>
+  <div class="card card--full">
+    <h2><?= $posts[$i]->getTitle() ?></h2>
+    <span class="text--muted">Publié le <?= $posts[$i]->getCreatedAt() ?></span>
+    <span class="text--muted"
+      >par <?= $posts[$i]->getUser()->getEmail() ?></span
+    >
+    <?php if ($posts[$i]->getImage()): ?>
+    <img
+      src="<?= $posts[$i]->getImage() ?>"
+      alt="<?= $posts[$i]->getTitle() ?>"
+      class="card__responsive-img"
+    />
+    <?php endif; ?>
+    <a
+      href="/posts/<?= $posts[$i]->getId() ?>"
+      class="button button--primary mt--2"
+      >Lire l'article</a
+    >
+  </div>
+  <?php endfor; ?>
+</div>

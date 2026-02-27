@@ -1,0 +1,41 @@
+<div class="container">
+  <article>
+    <header class="mb--4">
+      <div>
+        <h1><?= htmlspecialchars($post->getTitle()) ?></h1>
+        <?php if ($post->isPublished()): ?>
+        <span class="badge badge--success">Publié</span>
+        <?php else: ?>
+        <span class="badge badge--warning">Brouillon</span>
+        <?php endif; ?> <?php if ($post->getUser() && $post->getUser()->getId()
+        === \App\Core\Session::get('user')['id']): ?>
+        <a
+          href="/posts/<?= $post->getId() ?>/edit"
+          class="button button--small button--secondary ml--2"
+        >
+          Modifier
+        </a>
+        <?php endif; ?>
+      </div>
+      <p class="post__meta">
+        Publié le <?= date('d/m/Y', strtotime($post->getCreatedAt())) ?> <?php
+        if ($post->getUser()): ?> par <?=
+        htmlspecialchars($post->getUser()->getEmail()) ?> <?php endif; ?>
+      </p>
+    </header>
+
+    <?php if ($post->getImage()): ?>
+    <img
+      src="<?= htmlspecialchars($post->getImage()) ?>"
+      alt="<?= htmlspecialchars($post->getTitle()) ?>"
+      class="post__image mb--4"
+    />
+    <?php endif; ?>
+
+    <div class="post-content"><?= $post->getContent() ?></div>
+
+    <div class="mt--4">
+      <a href="/" class="button button--secondary">Retour à l'accueil</a>
+    </div>
+  </article>
+</div>

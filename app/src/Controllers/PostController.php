@@ -47,6 +47,10 @@ class PostController extends AbstractController
             return $this->listPosts();
         }
 
+        if (preg_match('#^/posts/(\d+)$#', $path, $matches) && $method === 'GET') {
+            return $this->showPost((int) $matches[1]);
+        }
+
         if ($path === '/posts/create' && $method === 'GET') {
             return $this->showCreateForm();
         }
@@ -69,12 +73,12 @@ class PostController extends AbstractController
             return $this->handleDelete((int) $matches[1]);
         }
 
-        return new Response('Page not found', 404);
+        return $this->render404();
     }
 
     private function index(): void
     {
-        $posts = $this->postRepository->findAll();
+        $posts = $this->postRepository->findBy(['published' => true]);
 
         $data = array_map(static function ($post) {
             return [
@@ -133,6 +137,31 @@ class PostController extends AbstractController
         $this->postRepository->update($post);
 
         return new Response(json_encode(['message' => 'Post updated successfully']), 200, ['Content-Type' => 'application/json']);
+    }
+
+    private function showPost(int $id): Response
+    {
+        $post = $this->postRepository->findOneBy(['id' => $id], ["user" => [
+            "table" => "user",
+            "condition" => "p.user",
+            "fields" => ["id", "email"]
+        ]]);
+
+        $currentUser = Session::get('user');    
+        if ($currentUser['role'] === 'admin' || ($currentUser['id'] === $post->getUser()->getId()) || $post->isPublished()) {
+            // L'utilisateur est admin ou propriétaire de l'article, accès autorisé
+        } else {
+            return $this->render404();
+        }
+
+        if (!$post) {
+            return $this->render404();
+        }
+
+        return $this->render('post/show', [
+            'title' => $post->getTitle(),
+            'post'  => $post,
+        ], 'home');
     }
 
     private function listPosts(): Response
@@ -229,7 +258,7 @@ class PostController extends AbstractController
         $post = $this->postRepository->findById($id);
 
         if (!$post) {
-            return new Response(PostRepository::POST_NOT_FOUND, 404);
+            return $this->render404();
         }
 
         return $this->render('post/edit', [
@@ -251,7 +280,7 @@ class PostController extends AbstractController
         $post = $this->postRepository->findById($id);
 
         if (!$post) {
-            return new Response(PostRepository::POST_NOT_FOUND, 404);
+            return $this->render404();
         }
 
         $title   = trim($_POST['title'] ?? '');
@@ -320,7 +349,7 @@ class PostController extends AbstractController
         $post = $this->postRepository->findById($id);
 
         if (!$post) {
-            return new Response(PostRepository::POST_NOT_FOUND, 404);
+            return $this->render404();
         }
 
         $this->postRepository->remove($post);

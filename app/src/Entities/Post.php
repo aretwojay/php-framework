@@ -24,8 +24,8 @@ class Post extends AbstractEntity
     #[Column(type: 'varchar', size: 255, unique: true)]
     protected string $slug;
 
-    #[Column(type: 'longtext')]
-    protected string $image = '';
+    #[Column(type: 'longtext', nullable: true)]
+    protected string|null $image = null;
 
     #[Column(type: 'text')]
     protected string $content;
@@ -67,12 +67,12 @@ class Post extends AbstractEntity
         return $this;
     }
 
-    public function getImage(): string
+    public function getImage(): string|null
     {
         return $this->image;
     }
 
-    public function setImage(string $image): self
+    public function setImage(string|null $image): self
     {
         $this->image = $image;
         return $this;
