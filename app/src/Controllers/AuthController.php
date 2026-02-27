@@ -54,7 +54,8 @@ class AuthController extends AbstractController
     {
         $email = filter_var($_POST['email'] ?? '', FILTER_SANITIZE_EMAIL);
         $password = $_POST['password'] ?? '';
-        
+        $passwordConfirm = $_POST['password_confirm'] ?? '';
+
         $errors = [];
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -63,6 +64,10 @@ class AuthController extends AbstractController
 
         if (strlen($password) < 8) {
             $errors[] = "Le mot de passe doit contenir au moins 8 caractères.";
+        }
+
+        if ($password !== $passwordConfirm) {
+            $errors[] = "Les mots de passe ne correspondent pas.";
         }
 
         if ($this->userRepository->findByEmail($email)) {

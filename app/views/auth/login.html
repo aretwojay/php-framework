@@ -2,7 +2,13 @@
   <section class="auth-form">
     <h1 class="auth-form__title">Connexion</h1>
     <?php if (isset($error)): ?>
-    <div class="auth-form__error badge mb--4"><?= $error ?></div>
+    <div
+      class="auth-form__error badge mb--4"
+      role="alert"
+      aria-live="assertive"
+    >
+      <?= $error ?>
+    </div>
     <?php endif; ?>
 
     <form action="/login" method="POST" class="auth-form__form">
@@ -13,6 +19,7 @@
           name="email"
           id="email"
           class="auth-form__input"
+          autocomplete="email"
           required
         />
       </div>
@@ -23,6 +30,7 @@
           name="password"
           id="password"
           class="auth-form__input"
+          autocomplete="current-password"
           required
         />
       </div>

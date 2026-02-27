@@ -148,7 +148,7 @@ class PostController extends AbstractController
         ]]);
 
         $currentUser = Session::get('user');    
-        if ($currentUser['role'] === 'admin' || ($currentUser['id'] === $post->getUser()->getId()) || $post->isPublished()) {
+        if ((isset($currentUser['role']) && $currentUser['role'] === 'admin') || ((isset($currentUser['id']) && $currentUser['id'] === $post->getUser()->getId())) || $post->isPublished()) {
             // L'utilisateur est admin ou propriétaire de l'article, accès autorisé
         } else {
             return $this->render404();
