@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /admin
+Disallow: /api
+Allow: /
+Sitemap: https://nextcms-latest.onrender.com/sitemap.xml
