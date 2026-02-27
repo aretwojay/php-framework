@@ -21,4 +21,7 @@ RUN service apache2 restart
 # Copy project files
 COPY ./app /var/www/html/
 
+# Install PHP dependencies
+RUN composer install --no-dev --optimize-autoloader --working-dir=/var/www/html
+
 EXPOSE 80

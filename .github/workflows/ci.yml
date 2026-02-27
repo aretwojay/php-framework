@@ -54,3 +54,6 @@ jobs:
           platforms: linux/amd64
           push: true
           tags: ${{ env.DOCKERHUB_USERNAME }}/nextcms:latest
+      - name: Render trigger deployment
+        if: github.event_name == 'push'
+        run: curl -X POST "${{ secrets.RENDER_DEPLOY_HOOK_URL_STAGING }}"
