@@ -24,5 +24,4 @@ jobs:
         with:
           platforms: linux/amd64,linux/arm64
           push: true
-          target: final
           tags: ${{ env.DOCKERHUB_USERNAME }}/nextcms:latest
