@@ -10,13 +10,13 @@
     <table class="table m--0">
       <thead>
         <tr>
-          <th class="pl--4">ID</th>
-          <th>Image</th>
-          <th>Titre</th>
-          <th>Auteur</th>
-          <th>Date</th>
-          <th>Statut</th>
-          <th class="pr--4 text-right">Actions</th>
+          <th scope="col" class="pl--4">ID</th>
+          <th scope="col">Image</th>
+          <th scope="col">Titre</th>
+          <th scope="col">Auteur</th>
+          <th scope="col">Date</th>
+          <th scope="col">Statut</th>
+          <th scope="col" class="pr--4 text-right">Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -27,7 +27,7 @@
             <?php if ($post->getImage()): ?>
             <img
               src="<?= htmlspecialchars($post->getImage()) ?>"
-              alt="Post Image"
+              alt="Image de <?= htmlspecialchars($post->getTitle()) ?>"
               class="table__img"
             />
             <?php else: ?>
@@ -42,7 +42,12 @@
             htmlspecialchars($post->getUser()->getEmail()) :
             htmlspecialchars($post->getUser()) ?>
           </td>
-          <td><?= date('d/m/Y', strtotime($post->getCreatedAt())) ?></td>
+          <td>
+            <time
+              datetime="<?= date('Y-m-d', strtotime($post->getCreatedAt())) ?>"
+              ><?= date('d/m/Y', strtotime($post->getCreatedAt())) ?></time
+            >
+          </td>
           <td>
             <span
               class="badge <?= $post->isPublished() ? 'badge--success' : 'badge--warning' ?>"
@@ -62,6 +67,7 @@
                 method="POST"
                 class="form--inline"
                 onsubmit="return confirm('Supprimer cet article ?');"
+                aria-label="Supprimer l'article <?= htmlspecialchars($post->getTitle()) ?>"
               >
                 <input
                   type="hidden"

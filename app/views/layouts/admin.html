@@ -3,17 +3,19 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?= $title ?? 'Admin Dashboard' ?></title>
+    <meta name="description" content="Panneau d’administration NextCMS" />
+    <title><?= $title ?? 'Admin Dashboard' ?> | NextCMS</title>
     <link rel="stylesheet" href="/public/css/main.css" />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
     <div class="admin-layout">
       <!-- Sidebar -->
       <aside class="sidebar">
         <div class="sidebar__header">
           <h2 class="sidebar__title">CMS Admin</h2>
         </div>
-        <nav class="sidebar__nav">
+        <nav class="sidebar__nav" aria-label="Navigation admin">
           <ul class="sidebar__list">
             <li class="sidebar__item">
               <a
@@ -40,7 +42,7 @@
         <!-- Topbar -->
         <header class="topbar">
           <div class="topbar__user">
-            <span class="topbar__avatar">👤</span>
+            <span class="topbar__avatar" aria-hidden="true">👤</span>
             <?= htmlspecialchars(\App\Core\Session::get('user')['email'] ??
             'Admin') ?>
           </div>
@@ -50,7 +52,9 @@
         </header>
 
         <!-- Page content -->
-        <section class="admin-layout__content"><?= $content ?></section>
+        <main id="main-content" class="admin-layout__content">
+          <?= $content ?>
+        </main>
       </div>
     </div>
   </body>

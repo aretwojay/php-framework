@@ -1,24 +1,30 @@
 <h1 class="mb--4">Bienvenue sur la page d'accueil</h1>
 <div class="card-container">
   <?php for ($i = 0; $i < count($posts); $i++): ?>
-  <div class="card card--full">
+  <article class="card card--full">
     <h2><?= $posts[$i]->getTitle() ?></h2>
-    <span class="text--muted">Publié le <?= $posts[$i]->getCreatedAt() ?></span>
+    <time
+      datetime="<?= date('Y-m-d', strtotime($posts[$i]->getCreatedAt())) ?>"
+      class="text--muted"
+      >Publié le <?= date('d/m/Y', strtotime($posts[$i]->getCreatedAt()))
+      ?></time
+    >
     <span class="text--muted"
       >par <?= $posts[$i]->getUser()->getEmail() ?></span
     >
     <?php if ($posts[$i]->getImage()): ?>
     <img
       src="<?= $posts[$i]->getImage() ?>"
-      alt="<?= $posts[$i]->getTitle() ?>"
+      alt="Image de l'article : <?= htmlspecialchars($posts[$i]->getTitle()) ?>"
       class="card__responsive-img"
     />
     <?php endif; ?>
     <a
       href="/posts/<?= $posts[$i]->getId() ?>"
       class="button button--primary mt--2"
+      aria-label="Lire l'article : <?= htmlspecialchars($posts[$i]->getTitle()) ?>"
       >Lire l'article</a
     >
-  </div>
+  </article>
   <?php endfor; ?>
 </div>

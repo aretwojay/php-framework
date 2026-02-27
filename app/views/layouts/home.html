@@ -3,18 +3,20 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?= $title ?? 'Accueil' ?></title>
+    <meta
+      name="description"
+      content="<?= $metaDescription ?? 'NextCMS — Créez et gérez vos articles facilement.' ?>"
+    />
+    <title><?= $title ?? 'Accueil' ?> | NextCMS</title>
     <link rel="stylesheet" href="/public/css/main.css" />
   </head>
   <body>
+    <a href="#main-content" class="skip-link">Aller au contenu principal</a>
     <header class="header">
       <div class="container header__container">
         <a href="/" class="header__brand">NextCMS</a>
-        <nav class="navbar">
+        <nav class="navbar" aria-label="Navigation principale">
           <ul class="navbar__list">
-            <li class="navbar__item">
-              <a href="/" class="navbar__link">Accueil</a>
-            </li>
             <li class="navbar__item">
               <a href="/posts" class="navbar__link">Articles</a>
             </li>
@@ -40,7 +42,9 @@
       </div>
     </header>
 
-    <main class="container p--4 typography"><?= $content ?></main>
+    <main id="main-content" class="container p--4 typography">
+      <?= $content ?>
+    </main>
 
     <footer class="footer">
       <div class="container">

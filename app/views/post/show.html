@@ -7,8 +7,9 @@
         <span class="badge badge--success">Publié</span>
         <?php else: ?>
         <span class="badge badge--warning">Brouillon</span>
-        <?php endif; ?> <?php if ($post->getUser() && $post->getUser()->getId()
-        === \App\Core\Session::get('user')['id']): ?>
+        <?php endif; ?> <?php if (isset(\App\Core\Session::get('user')['id']) &&
+        $post->getUser() && $post->getUser()->getId() ===
+        \App\Core\Session::get('user')['id']): ?>
         <a
           href="/posts/<?= $post->getId() ?>/edit"
           class="button button--small button--secondary ml--2"
@@ -18,8 +19,11 @@
         <?php endif; ?>
       </div>
       <p class="post__meta">
-        Publié le <?= date('d/m/Y', strtotime($post->getCreatedAt())) ?> <?php
-        if ($post->getUser()): ?> par <?=
+        Publié le
+        <time datetime="<?= date('Y-m-d', strtotime($post->getCreatedAt())) ?>"
+          ><?= date('d/m/Y', strtotime($post->getCreatedAt())) ?></time
+        >
+        <?php if ($post->getUser()): ?> par <?=
         htmlspecialchars($post->getUser()->getEmail()) ?> <?php endif; ?>
       </p>
     </header>
@@ -27,7 +31,7 @@
     <?php if ($post->getImage()): ?>
     <img
       src="<?= htmlspecialchars($post->getImage()) ?>"
-      alt="<?= htmlspecialchars($post->getTitle()) ?>"
+      alt="Image de l'article : <?= htmlspecialchars($post->getTitle()) ?>"
       class="post__image mb--4"
     />
     <?php endif; ?>
