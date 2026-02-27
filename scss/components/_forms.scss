@@ -73,5 +73,25 @@
       font-size: f.rem(14);
       color: var(--red);
     }
+
+    &__hint {
+      color: var(--grey);
+      font-size: f.rem(13);
+      display: block;
+      margin-top: f.rem(4);
+    }
+
+    &__preview {
+      max-width: f.rem(200);
+      border-radius: f.rem(6);
+    }
+
+    &--hidden {
+      display: none;
+    }
+
+    &--inline {
+      display: inline;
+    }
   }
 }

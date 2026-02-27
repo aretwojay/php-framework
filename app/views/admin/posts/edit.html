@@ -21,11 +21,11 @@
           <label for="image" class="form__label">Image</label>
           <?php if ($post->getImage()): ?>
               <div class="mb--2">
-                  <img src="<?= htmlspecialchars($post->getImage()) ?>" alt="Current Image" style="max-width: 200px; border-radius: 6px;">
+                  <img src="<?= htmlspecialchars($post->getImage()) ?>" alt="Current Image" class="form__preview">
               </div>
           <?php endif; ?>
           <input type="file" id="image" name="image" class="form__input form__input--file" accept="image/png, image/jpeg, image/webp" />
-          <small style="color: var(--grey); font-size: 0.8em; display: block; margin-top: 4px;">Laisser vide pour conserver l'image actuelle</small>
+          <small class="form__hint">Laisser vide pour conserver l'image actuelle</small>
       </div>
 
       <div class="form__group">
@@ -64,7 +64,7 @@
     </form>
     
     <!-- Hidden form for deletion -->
-    <form id="delete-form" action="/admin/posts/<?= $post->getId() ?>/delete" method="POST" style="display: none;">
+    <form id="delete-form" action="/admin/posts/<?= $post->getId() ?>/delete" method="POST" class="form--hidden">
         <input type="hidden" name="csrf_token" value="<?= $csrfToken ?>" />
     </form>
   </div>

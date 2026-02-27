@@ -2,6 +2,7 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?= $title ?? 'Admin Dashboard' ?></title>
     <link rel="stylesheet" href="/public/css/main.css" />
   </head>
@@ -43,11 +44,9 @@
             <?= htmlspecialchars(\App\Core\Session::get('user')['email'] ??
             'Admin') ?>
           </div>
-          <form method="POST" action="/logout">
-            <button type="submit" class="button button--primary button--small">
-              Déconnexion
-            </button>
-          </form>
+          <a href="/logout" class="button button--primary button--small">
+            Déconnexion
+          </a>
         </header>
 
         <!-- Page content -->

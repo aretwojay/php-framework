@@ -91,6 +91,11 @@
     "middleware": "AuthMiddleware"
   },
   {
+    "path": "/posts/:id",
+    "method": "GET",
+    "controller": "PostController"
+  },
+  {
     "path": "/posts/create",
     "method": "GET",
     "controller": "PostController",

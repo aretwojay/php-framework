@@ -1,52 +1,42 @@
-<!doctype html>
-<html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><?= $title ?? 'Inscription' ?></title>
-  </head>
-  <body>
-    <main class="auth-page">
-      <section class="auth-form">
-        <h1 class="auth-form__title">Inscription</h1>
-        <?php if (isset($errors) && !empty($errors)): ?>
-        <div class="auth-form__errors">
-          <?php foreach($errors as $err): ?>
-          <p class="auth-form__error" style="color: red"><?= $err ?></p>
-          <?php endforeach; ?>
-        </div>
-        <?php endif; ?>
+<main class="auth-page">
+  <section class="auth-form">
+    <h1 class="auth-form__title">Inscription</h1>
+    <?php if (isset($errors) && !empty($errors)): ?>
+    <div class="auth-form__errors">
+      <?php foreach($errors as $err): ?>
+      <p class="auth-form__error badge"><?= $err ?></p>
+      <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
 
-        <form action="/register" method="POST" class="auth-form__form">
-          <div class="auth-form__group">
-            <label for="email" class="auth-form__label">Email</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              class="auth-form__input"
-              required
-            />
-          </div>
-          <div class="auth-form__group">
-            <label for="password" class="auth-form__label">Mot de passe</label>
-            <input
-              type="password"
-              name="password"
-              id="password"
-              class="auth-form__input"
-              required
-              minlength="8"
-            />
-            <small class="auth-form__help">8 caractères minimum</small>
-          </div>
-          <button type="submit" class="auth-form__button">S'inscrire</button>
-        </form>
-        <p class="auth-form__footer">
-          Déjà un compte ?
-          <a href="/login" class="auth-form__link">Se connecter</a>
-        </p>
-      </section>
-    </main>
-  </body>
-</html>
+    <form action="/register" method="POST" class="auth-form__form">
+      <div class="auth-form__group">
+        <label for="email" class="auth-form__label">Email</label>
+        <input
+          type="email"
+          name="email"
+          id="email"
+          class="auth-form__input"
+          required
+        />
+      </div>
+      <div class="auth-form__group">
+        <label for="password" class="auth-form__label">Mot de passe</label>
+        <input
+          type="password"
+          name="password"
+          id="password"
+          class="auth-form__input"
+          required
+          minlength="8"
+        />
+        <small class="auth-form__help">8 caractères minimum</small>
+      </div>
+      <button type="submit" class="button button--primary">S'inscrire</button>
+    </form>
+    <p class="auth-form__footer">
+      Déjà un compte ?
+      <a href="/login" class="auth-form__link">Se connecter</a>
+    </p>
+  </section>
+</main>

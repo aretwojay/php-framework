@@ -29,7 +29,7 @@
               class="table__img"
             />
             <?php else: ?>
-            <span style="color: var(--grey)">Aucune</span>
+            <span class="text--muted">Aucune</span>
             <?php endif; ?>
           </td>
           <td>
@@ -43,6 +43,12 @@
           <td class="pr--4 text-right">
             <div class="d-flex gap--2 justify-content-end">
               <a
+                href="/posts/<?= $post->getId() ?>"
+                class="button button--small button--primary"
+                >Voir</a
+              >
+
+              <a
                 href="/posts/<?= $post->getId() ?>/edit"
                 class="button button--secondary button--small"
                 >Modifier</a
@@ -51,7 +57,7 @@
                 action="/posts/<?= $post->getId() ?>/delete"
                 method="POST"
                 onsubmit="return confirm('Êtes-vous sûr ?');"
-                style="display: inline"
+                class="form--inline"
               >
                 <input
                   type="hidden"

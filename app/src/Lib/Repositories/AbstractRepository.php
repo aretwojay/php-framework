@@ -106,13 +106,13 @@ abstract class AbstractRepository
     }
 
     public function andWhere(string $field, string $condition, ?string $table = null): self {
-        $this->queryString .= " AND ";
-        return $this->where($field, $condition, $table);
+        $this->queryString .= " AND " . ($table ?? $this->tableAlias) . ".$field $condition :$field";
+        return $this;
     }
 
     public function orWhere(string $field, string $condition, ?string $table = null): self {
-        $this->queryString .= " OR ";
-        return $this->where($field, $condition, $table);
+        $this->queryString .= " OR " . ($table ?? $this->tableAlias) . ".$field $condition :$field";
+        return $this;
     }
 
     public function where(string $field, string $condition, ?string $table = null): self {

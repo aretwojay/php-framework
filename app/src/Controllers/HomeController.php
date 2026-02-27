@@ -5,9 +5,15 @@ namespace App\Controllers;
 use App\Lib\Controllers\AbstractController;
 use App\Lib\Http\Request;
 use App\Lib\Http\Response;
+use App\Repositories\PostRepository;
 
 class HomeController extends AbstractController
 {
+    private PostRepository $postRepository;
+	public function __construct()
+	{
+	    $this->postRepository = new PostRepository();
+	}
 	public function process(Request $request): Response
 	{
 	    $path = $request->getPath();
@@ -19,6 +25,11 @@ class HomeController extends AbstractController
 
 	public function index(Request $request): Response
 	{
-		return $this->render('home/index', ['title' => 'Accueil'], 'home');
+		$posts = $this->postRepository->findBy(['published' => true], ["user" => [
+            "table" => "user",
+            "condition" => "p.user",
+            "fields" => ["id", "email"]
+        ]]);
+		return $this->render('home/index', ['title' => 'Accueil', 'posts' => $posts], 'home');
 	}
 }
